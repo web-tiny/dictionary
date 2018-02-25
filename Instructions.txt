@@ -1,0 +1,5 @@
+# dictionary
+The dictionary of myself web dev
+
+base64.js加密文件使用说明：
+加密方法：base64.encode64("要加密的内容")；解密方法：base64.decode64("要解密的内容")；
