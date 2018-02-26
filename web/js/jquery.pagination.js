@@ -183,6 +183,6 @@ jQuery.fn.pagination = function(maxentries, opts){
         // 回调函数
         opts.callback(current_page, this);
 	});
-}
+};
 
 

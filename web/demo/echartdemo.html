@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" user-scalable="no">
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/echarts.options.js"></script>
+
+    <title>ECharts</title>
+</head>
+<!--[if lte IE 8]>
+	<body class="lower-ie">
+		<div id="lowie-main"><img src="./images/forie.png" alt="ie tip"></div>
+	</body>
+<![endif]-->
+<!--[if (gt IE 8)|!(IE)]><body class="undefined"></body><![endif]-->
+
+<body>
+    <div style="margin: 50px auto; width: 80%;">
+        <div style="margin-top:10px; height: 320px; border: solid 1px red;">
+            <div id="staff_echart_pie" style="height:320px; width: 200px; border: solid 1px black; float: left;"></div>
+            <div id="age_echart_pie" style="height:320px; width: 200px; border: solid 1px black; float: left;"></div>
+            <div id="edubg_echart_pie" style="height:320px; width: 200px; border: solid 1px black; float: left;"></div>
+        </div>
+
+        <div style="margin-top:10px; height: 320px; border: solid 1px blue;">
+            <div id="trade_money_echart_bar" style="height:320px; border: solid 1px red; float: left; width: 400px;"></div>
+            <div id="trade_count_echart_bar" style="height:320px; border: solid 1px red; float: right; width: 400px;"></div>
+        </div>
+    </div>
+    <div style="margin-top:10px; height: 300px; border: solid 1px green;">
+        <div id="trade_echart_line" style="height:320px; "></div>
+    </div>
+    <script type="text/javascript">
+        window.onload = function () {
+            // 员工人员分布
+            // 基于准备好的dom，初始化echarts实例
+            var staffChart = echarts.init(document.getElementById('staff_echart_pie'));
+            // 使用刚指定的配置项和数据显示图表。
+            var staff_items = [{
+                name: '风险控制团队',
+                value: '8.74'
+            }, {
+                name: 'IT团队',
+                value: '22.33'
+            }, {
+                name: '其他',
+                value: '68.93'
+            }];
+            staffChart.setOption(generatePieOptions('员工人员分布', staff_items));
+            // 员工年龄结构
+            var ageChart = echarts.init(document.getElementById('age_echart_pie'));
+            var age_items = [{
+                name: '20-30岁',
+                value: '77.67'
+            }, {
+                name: '30-40岁',
+                value: '19.42'
+            }, {
+                name: '40-50岁',
+                value: '2.91'
+            }];
+            ageChart.setOption(generatePieOptions('员工年龄结构', age_items));
+            // 员工学历结构
+            var edubgChart = echarts.init(document.getElementById('edubg_echart_pie'));
+            var edubg_items = [{
+                name: '专科及以下',
+                value: '47.57'
+            }, {
+                name: '本科',
+                value: '47.57'
+            }, {
+                name: '硕士及以上',
+                value: '4.86'
+            }];
+            edubgChart.setOption(generatePieOptions('员工学历结构', edubg_items));
+
+            var tradeChart = echarts.init(document.getElementById('trade_echart_line'));
+            // 使用刚指定的配置项和数据显示图表。
+            var xAxisValue = ['2016-12', '2017-1', '2017-2', '2017-3', '2017-4', '2017-5', '2017-6', '2017-7', '2017-8', '2017-9', '2017-10', '2017-11'];
+            var tradeMoney = [85364500 / 10000, 102193400 / 10000, 116102600 / 10000,
+            147795800 / 10000, 171414200 / 10000, 193293200 / 10000,
+            214610900 / 10000, 266874800 / 10000, 241473200 / 10000,
+            228711700 / 10000, 231394000 / 10000, 170440800 / 10000
+            ];
+            var tradeCount = [51577 / 10000, 58684 / 10000, 64293 / 10000,
+            78395 / 10000, 87949 / 10000, 95777 / 10000,
+            107232 / 10000, 139131 / 10000, 115513 / 10000,
+            96546 / 10000, 94825 / 10000, 67022 / 10000
+            ];
+            tradeChart.setOption(generateLineOption('近一年交易数据统计', xAxisValue, [tradeMoney, tradeCount]));
+
+            var tradeChart = echarts.init(document.getElementById('trade_money_echart_bar'));
+            // 使用刚指定的配置项和数据显示图表。
+            var xAxisData = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+            tradeChart.setOption(generateBarOption('交易金额', xAxisData, tradeMoney));
+
+            var tradeChart = echarts.init(document.getElementById('trade_count_echart_bar'));
+            // 使用刚指定的配置项和数据显示图表。
+            tradeChart.setOption(generateBarOption('交易笔数', xAxisData, tradeCount));
+            //注册人数：3015620    放款总额：2426708100  累计借款笔数：1236309
+        };
+    </script>
+</body>
+
+</html>
