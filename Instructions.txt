@@ -1,5 +1,21 @@
-# dictionary
+﻿# dictionary
 The dictionary of myself web dev
 
 base64.js加密文件使用说明：
 加密方法：base64.encode64("要加密的内容")；解密方法：base64.decode64("要解密的内容")；
+/**
+* fastclick.js（解决移动端300毫秒的延迟）引入写法
+*/
+//方法一
+if('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+	FastClick.attach(document.body);
+}, false);
+}
+//方法二（当使用jquery的时候）
+$(function() {
+	FastClick.attach(document.body);
+});
+//方法三（使用AMD时）
+var attachFastClick = require('fastclick');
+attachFastClick(document.body);
