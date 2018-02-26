@@ -1,7 +1,7 @@
 /**
  * 有关时间的处理
  */
-let time = {
+let _time = {
 	/**
 	 * 获得当前时间戳
 	 */
@@ -127,8 +127,8 @@ let time = {
 		if (/^[1-9]+[0-9]*]*$/.test(days)) {
 			var toInt = days * 1 | 0 || 0,//将天数做整数处理
 				second = toInt * 24 * 60 * 60,
-				nowTimestemp = common._timestemp();
-			return common._getDateHasHoursMinutesSecondes(second + nowTimestemp);
+				nowTimestemp = _time._timestemp();
+			return _time._getDateHasHoursMinutesSecondes(second + nowTimestemp);
 		} else {
 			alert("请输入整数！");
 		}
@@ -137,7 +137,7 @@ let time = {
 /**
  * 有关表单的验证
  */
-let form = {
+let _form = {
 	/**
 	 * 表单验证,验证中文名称 
 	 * @param {Object} name
@@ -184,7 +184,7 @@ let form = {
 /**
  * url指定内容的获取
  */
-let url = {
+let _url = {
 	/**
 	 * 截取url指定的内容
 	 * @param {Object} name
@@ -203,7 +203,7 @@ let url = {
 /**
  * 判断参数，数组，url是否为空
  */
-let empty = {
+let _empty = {
 	/**
 	 * 判断参数是否为空
 	 * @param {Object} params
@@ -222,7 +222,7 @@ let empty = {
 		var flag = false;
 		if (params.length > 0) {
 			for (var i = 0; i < params.length; i++) {
-				if (empty._isEmpty(params[i])) {
+				if (_empty._isEmpty(params[i])) {
 					flag = true;
 					break;
 				}
@@ -250,13 +250,13 @@ let empty = {
 /**
  * 弹框，提示框
  **/
-var PopupWindow = {
+var _PopupWindow = {
 	/**
 	 * 提示框
 	 * @param {Object} content
 	 * @param {Object} times
 	 */
-	tips: function (content, times) {
+	_tips: function (content, times) {
 		var div = document.createElement('div'), timer;
 		div.innerHTML = content;
 		div.setAttribute('style', 'position: absolute;height: 40px;width: 100px;background: #000000;color: #FFFFFF;font-size: 14px;text-align: center;line-height: 40px;opacity: 0.6;border-radius: 30px;top: 50%;left: 50%;margin-left: -50px;margin-top: -20px;');
@@ -282,7 +282,7 @@ var PopupWindow = {
 		});
 	 * @param {Object} obj
 	 */
-	PopupLayout: function (obj) {
+	_PopupLayout: function (obj) {
 		/**新增修改**/
 		var el = document.getElementById(obj.id);
 		if (el) {
@@ -322,26 +322,26 @@ var PopupWindow = {
 			document.getElementsByClassName('bounce_layout')[0].setAttribute('style', 'display: none;');
 			document.getElementsByClassName('bounce_wrap')[0].setAttribute('style', 'display: none;');
 		}
-		common._addHandler(_this.layout, 'click', function () {
+		_event._addHandler(_this.layout, 'click', function () {
 			_this.hidden();
 		})
 		var bottomTitle1 = document.getElementsByClassName('bottomTitle1')[0];
 		var bottomTitle2 = document.getElementsByClassName('bottomTitle2')[0];
-		common._addHandler(bottomTitle1, 'click', function () {
+		_event._addHandler(bottomTitle1, 'click', function () {
 			if (obj.bottomTitleFn1) {
 				obj.bottomTitleFn1();
 				return false;
 			}
 			_this.hidden();
 		});
-		common._addHandler(bottomTitle2, 'click', function () {
+		_event._addHandler(bottomTitle2, 'click', function () {
 			obj.bottomTitleFn2();
 		});
 	},
 	/**
 	 * 加载提示
 	 */
-	loading: function (boolean) {
+	_loading: function (boolean) {
 		let divbowlG = document.createElement('div');
 		divbowlG.innerHTML = `<div id="bowlG"><div id="bowl_ringG"><div class="ball_holderG">
 				<div class="ballG"></div></div></div><p class="loadWord">加载中...</p></div>`;
@@ -357,7 +357,7 @@ var PopupWindow = {
  * 倒计时，
  * 注意：写成button，以便设置在规定的时间不能重复点击
  */
-let countdown = {
+let _countdown = {
 	/**
 	 * 倒计时
 	 * @param {Object} hide_obj
@@ -382,7 +382,7 @@ let countdown = {
  * 事件相关
  * 添加事件，移除事件，获取事件，获取事件对象，阻止默认行为，阻止冒泡
  */
-let event = {
+let _event = {
 	/**
 	 * js原生添加事件
 	 * @param element
