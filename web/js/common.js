@@ -562,10 +562,10 @@ let _event = {
 };
 /**
  * 将数字每三个用逗号分割
- * @param n
+ * @param number
  * @returns {string}
  */
-let numberf = {
+let _number = {
 	_numberFormat: function (number) {
 		var b = parseInt(number).toString();
 		var len = b.length;
@@ -577,8 +577,252 @@ let numberf = {
 	}
 };
 
-var client = function () {
+/**
+ * 自定义事件：
+ * 当代码中存在多个部分在特定时刻相互交互的情况下，自定义事件就非常有用。这时，如果每个对象都有对其他所有对象的引用，那么整个代码就会紧密耦合，同时维护也变得困难，因为对某个对象的修改也会影响到其他对象。使用自定义事件有助于解耦相关对象，保持功能的隔绝。
+ */
+function EventTarget() {
+	this.handlers = {};
+}
 
+EventTarget.prototype = {
+	constructor: EventTarget,
+
+	addHandler: function (type, handler) {
+		if (typeof this.handlers[type] == "undefined") {
+			this.handlers[type] = [];
+		}
+
+		this.handlers[type].push(handler);
+	},
+
+	fire: function (event) {
+		if (!event.target) {
+			event.target = this;
+		}
+		if (this.handlers[event.type] instanceof Array) {
+			var handlers = this.handlers[event.type];
+			for (var i = 0, len = handlers.length; i < len; i++) {
+				handlers[i](event);
+			}
+		}
+	},
+
+	removeHandler: function (type, handler) {
+		if (this.handlers[type] instanceof Array) {
+			var handlers = this.handlers[type];
+			for (var i = 0, len = handlers.length; i < len; i++) {
+				if (handlers[i] === handler) {
+					break;
+				}
+			}
+			handlers.splice(i, 1);
+		}
+	}
+};
+/**
+ * 拖拽
+ */
+var _dragDrop = function () {
+	var dragdrop = new EventTarget(),
+		dragging = null,
+		diffX = 0,
+		diffY = 0;
+	function handleEvent(event) {
+		//get event and target
+		event = _event._getEvent(event);
+		var target = _event._getTarget(event);
+		//determine the type of event
+		switch (event.type) {
+			case "mousedown":
+				if (target.className.indexOf("draggable") > -1) {
+					dragging = target;
+					diffX = event.clientX - target.offsetLeft;
+					diffY = event.clientY - target.offsetTop;
+					dragdrop.fire({ type: "dragstart", target: dragging, x: event.clientX, y: event.clientY });
+				}
+				break;
+			case "mousemove":
+				if (dragging !== null) {
+					var left = event.clientX - diffX;
+					var top = event.clientY - diffY;
+					//判断左边是否过界
+					if (left < 0) {
+						left = 0;
+					}
+					//判断右边是否过界
+					else if (left > document.documentElement.clientWidth - dragging.offsetWidth) {
+						left = document.documentElement.clientWidth - dragging.offsetWidth;
+					}
+					//判断上边是否过界
+					if (top < 0) {
+						top = 0;
+					}
+					//判断下边是否过界
+					else if (top > document.documentElement.clientHeight) {
+						top = document.documentElement.clientHeight - dragging.offsetHeight;
+					}
+					//assign location
+					dragging.style.left = left + "px";
+					dragging.style.top = top + "px";
+
+					//fire custom event
+					dragdrop.fire({ type: "drag", target: dragging, x: event.clientX, y: event.clientY });
+				}
+				break;
+			case "mouseup":
+				dragdrop.fire({ type: "dragend", target: dragging, x: event.clientX, y: event.clientY });
+				dragging = null;
+				break;
+		}
+	};
+	//public interface
+	dragdrop.enable = function () {
+		_event._addHandler(document, "mousedown", handleEvent);
+		_event._addHandler(document, "mousemove", handleEvent);
+		_event._addHandler(document, "mouseup", handleEvent);
+	};
+	dragdrop.disable = function () {
+		_event._addHandler(document, "mousedown", handleEvent);
+		_event._addHandler(document, "mousemove", handleEvent);
+		_event._addHandler(document, "mouseup", handleEvent);
+	};
+	return dragdrop;
+}();
+/**
+ * cookie
+ */
+var _cookie = {
+    _get: function (name){
+        var cookieName = encodeURIComponent(name) + "=",
+            cookieStart = document.cookie.indexOf(cookieName),
+            cookieValue = null,
+            cookieEnd;           
+        if (cookieStart > -1){
+            cookieEnd = document.cookie.indexOf(";", cookieStart);
+            if (cookieEnd == -1){
+                cookieEnd = document.cookie.length;
+            }
+            cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd));
+        } 
+        return cookieValue;
+    },   
+    _set: function (name, value, expires, path, domain, secure) {
+        var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);    
+        if (expires instanceof Date) {
+            cookieText += "; expires=" + expires.toGMTString();
+        }   
+        if (path) {
+            cookieText += "; path=" + path;
+        }    
+        if (domain) {
+            cookieText += "; domain=" + domain;
+        }   
+        if (secure) {
+            cookieText += "; secure";
+        }   
+        document.cookie = cookieText;
+    },   
+    _unset: function (name, path, domain, secure){
+        this.set(name, "", new Date(0), path, domain, secure);
+    }
+};
+/**
+ * subCookie
+ */
+var _subCookieUtil = {
+    _get: function (name, subName){
+        var subCookies = this.getAll(name);
+        if (subCookies){
+            return subCookies[subName];
+        } else {
+            return null;
+        }
+    },   
+    _getAll: function(name){
+        var cookieName = encodeURIComponent(name) + "=",
+            cookieStart = document.cookie.indexOf(cookieName),
+            cookieValue = null,
+            cookieEnd,
+            subCookies,
+            i,
+            parts,
+            result = {};           
+        if (cookieStart > -1){
+            cookieEnd = document.cookie.indexOf(";", cookieStart)
+            if (cookieEnd == -1){
+                cookieEnd = document.cookie.length;
+            }
+            cookieValue = document.cookie.substring(cookieStart + cookieName.length, cookieEnd);           
+            if (cookieValue.length > 0){
+                subCookies = cookieValue.split("&");               
+                for (i=0, len=subCookies.length; i < len; i++){
+                    parts = subCookies[i].split("=");
+                    result[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+                }    
+                return result;
+            }  
+        } 
+        return null;
+    },    
+    _set: function (name, subName, value, expires, path, domain, secure) {    
+        var subcookies = this.getAll(name) || {};
+        subcookies[subName] = value;
+        this.setAll(name, subcookies, expires, path, domain, secure);
+    },    
+    _setAll: function(name, subcookies, expires, path, domain, secure){    
+        var cookieText = encodeURIComponent(name) + "=",
+            subcookieParts = new Array(),
+            subName;        
+        for (subName in subcookies){
+            if (subName.length > 0 && subcookies.hasOwnProperty(subName)){
+                subcookieParts.push(encodeURIComponent(subName) + "=" + encodeURIComponent(subcookies[subName]));
+            }
+        }        
+        if (subcookieParts.length > 0){
+            cookieText += subcookieParts.join("&");               
+            if (expires instanceof Date) {
+                cookieText += "; expires=" + expires.toGMTString();
+            }        
+            if (path) {
+                cookieText += "; path=" + path;
+            }        
+            if (domain) {
+                cookieText += "; domain=" + domain;
+            }        
+            if (secure) {
+                cookieText += "; secure";
+            }
+        } else {
+            cookieText += "; expires=" + (new Date(0)).toGMTString();
+        }    
+        document.cookie = cookieText;            
+    },    
+    _unset: function (name, subName, path, domain, secure){
+        var subcookies = this.getAll(name);
+        if (subcookies){
+            delete subcookies[subName];
+            this.setAll(name, subcookies, null, path, domain, secure);
+        }
+    },    
+    _unsetAll: function(name, path, domain, secure){
+        this.setAll(name, null, new Date(0), path, domain, secure);
+    }
+};
+/**
+ * 函数节流：
+ * 只要时周期性执行的，都应该使用节流。如onresize事件，以免造成浏览器运行缓慢。
+ * @param {*} method 
+ * @param {*} scope 
+ */
+function throttle(method, scope) {
+	clearTimeout(method.tId);
+	method.tId= setTimeout(function(){
+		method.call(scope);
+	}, 100);
+}
+
+var client = function () {
 	//rendering engines
 	var engine = {
 		ie: 0,
@@ -586,14 +830,11 @@ var client = function () {
 		webkit: 0,
 		khtml: 0,
 		opera: 0,
-
 		//complete version
 		ver: null
 	};
-
 	//browsers
 	var browser = {
-
 		//browsers
 		ie: 0,
 		firefox: 0,
@@ -602,18 +843,14 @@ var client = function () {
 		opera: 0,
 		chrome: 0,
 		safari: 0,
-
 		//specific version
 		ver: null
 	};
-
-
 	//platform/device/OS
 	var system = {
 		win: false,
 		mac: false,
 		x11: false,
-
 		//mobile devices
 		iphone: false,
 		ipod: false,
@@ -622,12 +859,10 @@ var client = function () {
 		android: false,
 		nokiaN: false,
 		winMobile: false,
-
 		//game systems
 		wii: false,
 		ps: false
 	};
-
 	//detect rendering engines/browsers
 	var ua = navigator.userAgent;
 	if (window.opera) {
@@ -636,7 +871,6 @@ var client = function () {
 	} else if (/AppleWebKit\/(\S+)/.test(ua)) {
 		engine.ver = RegExp["$1"];
 		engine.webkit = parseFloat(engine.ver);
-
 		//figure out if it's Chrome or Safari
 		if (/Chrome\/(\S+)/.test(ua)) {
 			browser.ver = RegExp["$1"];
@@ -656,7 +890,6 @@ var client = function () {
 			} else {
 				safariVersion = 2;
 			}
-
 			browser.safari = browser.ver = safariVersion;
 		}
 	} else if (/KHTML\/(\S+)/.test(ua) || /Konqueror\/([^;]+)/.test(ua)) {
@@ -665,7 +898,6 @@ var client = function () {
 	} else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)) {
 		engine.ver = RegExp["$1"];
 		engine.gecko = parseFloat(engine.ver);
-
 		//determine if it's Firefox
 		if (/Firefox\/(\S+)/.test(ua)) {
 			browser.ver = RegExp["$1"];
@@ -675,18 +907,14 @@ var client = function () {
 		engine.ver = browser.ver = RegExp["$1"];
 		engine.ie = browser.ie = parseFloat(engine.ver);
 	}
-
 	//detect browsers
 	browser.ie = engine.ie;
 	browser.opera = engine.opera;
-
-
 	//detect platform
 	var p = navigator.platform;
 	system.win = p.indexOf("Win") == 0;
 	system.mac = p.indexOf("Mac") == 0;
 	system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);
-
 	//detect windows operating systems
 	if (system.win) {
 		if (/Win(?:dows )?([^do]{2})\s?(\d+\.\d+)?/.test(ua)) {
@@ -715,14 +943,12 @@ var client = function () {
 			}
 		}
 	}
-
 	//mobile devices
 	system.iphone = ua.indexOf("iPhone") > -1;
 	system.ipod = ua.indexOf("iPod") > -1;
 	system.ipad = ua.indexOf("iPad") > -1;
 	system.nokiaN = ua.indexOf("NokiaN") > -1;
 	system.winMobile = (system.win == "CE");
-
 	//determine iOS version
 	if (system.mac && ua.indexOf("Mobile") > -1) {
 		if (/CPU (?:iPhone )?OS (\d+_\d+)/.test(ua)) {
@@ -731,22 +957,17 @@ var client = function () {
 			system.ios = 2;  //can't really detect - so guess
 		}
 	}
-
 	//determine Android version
 	if (/Android (\d+\.\d+)/.test(ua)) {
 		system.android = parseFloat(RegExp.$1);
 	}
-
 	//gaming systems
 	system.wii = ua.indexOf("Wii") > -1;
 	system.ps = /playstation/i.test(ua);
-
 	//return it
 	return {
 		engine: engine,
 		browser: browser,
 		system: system
 	};
-
 }();
-
