@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cookie</title>
+    <link rel="dns-prefetch" href="../css/common.css">
+</head>
+
+<body>
+	<button id="delCookie">delCookie</button>
+    <script src="../js/common.js" async></script>
+    <script>
+        window.onload = function () {
+            _subCookie._set("information","name","tiny.jiao");
+            _subCookie._set("information","age","45");
+            _subCookie._set("information","idcard","522428198910050030");
+            _subCookie._setAll("people",["man","woman"]);
+
+            console.log(_subCookie._getAll("information"));
+            console.log(_subCookie._getAll("people"));
+            
+            var delCookie=document.getElementById("delCookie");
+            _event._addHandler(delCookie,'click',function(){
+            	_subCookie._unset("information","age");
+            })
+            _subCookie._set("data","name","tiny.jiao");
+            console.log(_subCookie._get("data","name"));
+            console.log(_subCookie._getAll("data"));
+        }
+    </script>
+</body>
+
+</html>
