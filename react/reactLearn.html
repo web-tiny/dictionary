@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>react learn</title>
+</head>
+<body>
+    <script>
+        /* 
+        *react基础知识梳理：
+        *1：state是数据中心，调用setState就会触发页面重新渲染。
+        *2：diff算法：dom更新的时候，react会创建虚拟dom与之前存储的dom树进行比较，这时候就用到diff算法
+        *3：创建列表的时候加上key值作为表示，以提高react性能
+        *4：constructor构造器在什么时候调用？实例化对象的时候
+        *5：react组件如何创建？1：React.creatClass();2:class Main extends React.component().
+        *6：tips：(1)：类名首字母必须大写;(2)类选择器需要用className替代class (3):类和模块内部默认使用严格*模式，所以不要用use strict指定运行模式
+        *7：组件在初始化时触发5个钩子函数：
+        * 1）：getDefaultProps()；
+        * 2）：getInitialState()，在使用es6的*class语法时是没有这个钩子函数的，可以直接在constructor中定义this.state。此时可以访问this.props。
+        * 3）：componentWillMount(),组件初始化时调用，以后组件更新不调用，整个生命周期只调用一次，此时可以修改state
+        * 4）：reader(),创建虚拟dom，进行diff算法，更新dom树，此时不能更改state
+        * 5）：componentDidMount(),组件渲染后调用，可以通过this.getDomNode()获取和操作dom，只调用一次。
+        * 8：组件更新时也触发5个钩子函数：
+        * 1）：componentWillReceiveProps(newProps),初始化时不调用，接收新的props时调用。
+        * 2）：shouldComponentUpdate(nextProps，nextState),react性能优化最重要的一环，组件接收新的state和props时调用，我们可以设置在此对比前后两个props和state是否相同，如果相同则返回false阻止更新，因为相同的属性状态一定会生成相同的dom树，这样就不需要创造新的dom树和旧的dom树进行diff算法对比，节省大量性能，尤其是在dom结构复杂的时候。不过调用this.forceUpdate会跳过此步骤。
+        * 3）：componentWillUpdate(nextProps，nextState);组件初始化时不调用，只有在组件将要更新时才调用，此时可以修改state。
+        * 4）：render(0)；
+        * 5）: componentDidUpdate(),组件初始化时不调用，更新完后调用，此时可以获取dom节点
+        * 6）：componentWillUnmount(),组件将要卸载时调用，一些事件监听和定时器需要在此时清除
+        * 8：router，是一个路由规则的配置对象，根据匹配的路由地址展现相应的组件，rooter可以向绑定的组件传递7个属性：children/history/location/params/route/routParams,routs,
+        * 9: components之间的通信：
+        * 1）：父组件向子组件传值：父组件将回调函数当做属性传递给子组件即可；多层次的用上下文getChildContext来传递信息，任何一层的子组件都可以通过this.context访问
+        * 2）：兄弟组件之间无法直接通信，只能利用同一层的上级作为中转，其实这就是redux做的事
+        * 10：redux，并不是必须的，相当于在顶层组件又加了一层组件，实现尤其是顶层组件的通信,它跟react没半毛钱的关系，是react-reducer让其联系起来的。由以下三部分组成：
+        * 1）：store，store的主要作用是将action和reducer联系起来并改变state,四个主要方法：dispatch/subscribe/getState/replaceReducer，
+        * 2）：reducer，reducer是一个函数，它接受一个state和一个action，根据action的type返回一个新的state。根据业务逻辑可以分为很多个reducer，然后通过combineReducers将它们合并，state树中有很多对象，每个state对象对应一个reducer，state对象的名字可以在合并时定义。
+        * 3）：action，action是一个对象，其中type属性是必须的，同时可以传入一些数据。action可以用actionCreactor进行创造。dispatch就是把action对象发送出去。)
+        * 11：redux的state和react的state两者完全没有关系，除了名字一样。
+        * 12：react-redux:Provider和connect。
+        * 1):Provider是一个组件，它接受store作为props，然后通过context往下传，这样react中任何组件都可以通过context获取store。也就意味着我们可以在任何一个组件里利用dispatch(action)来触发reducer改变state，并用subscribe监听state的变化，然后用getState获取变化后的值。但是并不推荐这样做，它会让数据流变的混乱，过度的耦合也会影响组件的复用，维护起来也更麻烦。
+        * 2):connect --connect(mapStateToProps, mapDispatchToProps, mergeProps, options) 是一个函数，它接受四个参数并且再返回一个函数--wrapWithConnect，wrapWithConnect接受一个组件作为参数wrapWithConnect(component)，它内部定义一个新组件Connect(容器组件)并将传入的组件(ui组件)作为Connect的子组件然后return出去。所以它的完整写法是这样的：connect(mapStateToProps, mapDispatchToProps, mergeProps, options)(component)
+        * 
+        */
+
+    </script>
+</body>
+</html>
