@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../build/react.js"></script>
+  <script src="../build/react-dom.js"></script>
+  <script src="../build/browser.min.js"></script>
+</head>
+
+<body>
+  <div id="example"></div>
+  <script type="text/babel">
+    /*  表单
+    用户在表单输入的内容属于跟用户互动的内容，所以不能用this.props，要用this.state
+    下面代码中，文本输入框的值不能用this.props.value来获取，要定义一个onChange事件回到函数，通过event.target.value来获取用户输入的值，textarea，select，radio都属于这种情况，
+    */
+      var Input = React.createClass({
+        getInitialState: function() {
+          return {value: 'Hello!'};
+        },
+        handleChange: function(event) {
+          this.setState({value: event.target.value});
+        },
+        render: function () {
+          var value = this.state.value;
+          return (
+            <div>
+              <input type="text" value={value} onChange={this.handleChange} />
+              <p>{value}</p>
+            </div>
+          );
+        }
+      });
+
+      ReactDOM.render(<Input/>, document.getElementById('example'));
+    </script>
+</body>
+
+</html>
