@@ -704,11 +704,11 @@ var _cookie = {
                 cookieEnd = document.cookie.length;
             }
             cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd));
-        } 
+		} 
         return cookieValue;
     },   
     _set: function (name, value, expires, path, domain, secure) {
-        var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);    
+		var cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value);   
         if (expires instanceof Date) {
             cookieText += "; expires=" + expires.toGMTString();
         }   
@@ -721,18 +721,18 @@ var _cookie = {
         if (secure) {
             cookieText += "; secure";
         }   
-        document.cookie = cookieText;
+		document.cookie = cookieText;		
     },   
     _unset: function (name, path, domain, secure){
-        this.set(name, "", new Date(0), path, domain, secure);
+        this._set(name, "", new Date(0), path, domain, secure);
     }
 };
 /**
  * subCookie
  */
-var _subCookieUtil = {
+var _subCookie = {
     _get: function (name, subName){
-        var subCookies = this.getAll(name);
+        var subCookies = this._getAll(name);
         if (subCookies){
             return subCookies[subName];
         } else {
@@ -766,9 +766,9 @@ var _subCookieUtil = {
         return null;
     },    
     _set: function (name, subName, value, expires, path, domain, secure) {    
-        var subcookies = this.getAll(name) || {};
+        var subcookies = this._getAll(name) || {};
         subcookies[subName] = value;
-        this.setAll(name, subcookies, expires, path, domain, secure);
+        this._setAll(name, subcookies, expires, path, domain, secure);
     },    
     _setAll: function(name, subcookies, expires, path, domain, secure){    
         var cookieText = encodeURIComponent(name) + "=",
@@ -799,14 +799,14 @@ var _subCookieUtil = {
         document.cookie = cookieText;            
     },    
     _unset: function (name, subName, path, domain, secure){
-        var subcookies = this.getAll(name);
+        var subcookies = this._getAll(name);
         if (subcookies){
             delete subcookies[subName];
-            this.setAll(name, subcookies, null, path, domain, secure);
+            this._setAll(name, subcookies, null, path, domain, secure);
         }
     },    
     _unsetAll: function(name, path, domain, secure){
-        this.setAll(name, null, new Date(0), path, domain, secure);
+        this._setAll(name, null, new Date(0), path, domain, secure);
     }
 };
 /**

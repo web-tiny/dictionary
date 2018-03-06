@@ -288,106 +288,107 @@
 			/**
              * 分页用例JS
              * */
-			 var pageindex = 0;
-            function page(lang) {
-                var num_entries = lang;
-                // 创建分页
-                $("#newsDirect").pagination(num_entries, {
-                    num_edge_entries: 1, //边缘页数
-                    num_display_entries: 3, //主体页数
-                    callback: pageselectCallback,
-                    items_per_page: 1, //每页显示1项
-                    current_page: pageindex
-                });
-            }
+			var pageindex = 0;
+			function page(lang) {
+				var num_entries = lang;
+				// 创建分页
+				$("#newsDirect").pagination(num_entries, {
+					num_edge_entries: 1, //边缘页数
+					num_display_entries: 3, //主体页数
+					callback: pageselectCallback,
+					items_per_page: 1, //每页显示1项
+					current_page: pageindex
+				});
+			}
 
             /**
              * 创建分页中调用的回调函数
              * @param {Object} page_index
              * @param {Object} jq
              */
-            function pageselectCallback(page_index, jq) {
-                pageindex = page_index;
-                getpedd_more(pageindex, '3');
-                return false;
-            }
+			function pageselectCallback(page_index, jq) {
+				pageindex = page_index;
+				getpedd_more(pageindex, '3');
+				return false;
+			}
 
 
-            pedd_list(pageindex,'3');
+			pedd_list(pageindex, '3');
             /**
              * 进入到页面时先初始化
              * @param {Object} pageindex
              * @param {Object} pagesize
              */
-            function pedd_list(pageindex,pagesize) {
-                $.ajax({
-                    data: {
-                        pageIndex: pageindex ||'1',
-                        pageSize: pagesize ||'3'
-                    },
-                    url: " ",
-                    dataType: 'jsonp',
-                    crossDomain: true,
-                    jsonp: "callback",
-                    jsonpCallback: 'msd',
-                    type: "GET",
-                    success: function(res) {
-                        $('#search_box').css('display', 'block');
-                        var lang = res.totalPageNum;
-                        page(lang);
-                        var arr = res.list;
-                        console.log(arr);
-                        for(var i = 0; i < arr.length; i++) {
-                            $('#Searchresult').append(
-                                //存放请求回来的数据。
-                            )
-                        }
+			function pedd_list(pageindex, pagesize) {
+				$.ajax({
+					data: {
+						pageIndex: pageindex || '1',
+						pageSize: pagesize || '3'
+					},
+					url: " ",
+					dataType: 'jsonp',
+					crossDomain: true,
+					jsonp: "callback",
+					jsonpCallback: 'msd',
+					type: "GET",
+					success: function (res) {
+						$('#search_box').css('display', 'block');
+						var lang = res.totalPageNum;
+						page(lang);
+						var arr = res.list;
+						console.log(arr);
+						for (var i = 0; i < arr.length; i++) {
+							$('#Searchresult').append(
+								//存放请求回来的数据。
+							)
+						}
 
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
+					},
+					error: function (error) {
+						console.log(error);
+					}
+				});
+			}
 
             /**
              * 初始化以后每一次点击都发送一次请求
              * @param {Object} pageindex
              * @param {Object} pagesize
              */
-            function getpedd_more(pageindex,pagesize) {
-                $.ajax({
-                    data: {
-                        pageIndex: pageindex+1 ||'1',
-                        pageSize: pagesize ||'3'
-                    },
-                    url: "",
-                    dataType: 'jsonp',
-                    crossDomain: true,
-                    jsonp: "callback",
-                    jsonpCallback: 'msdnews',
-                    type: "GET",
-                    success: function(data) {
-                        var arr = data.list;
-                        console.log(arr);
+			function getpedd_more(pageindex, pagesize) {
+				$.ajax({
+					data: {
+						pageIndex: pageindex + 1 || '1',
+						pageSize: pagesize || '3'
+					},
+					url: "",
+					dataType: 'jsonp',
+					crossDomain: true,
+					jsonp: "callback",
+					jsonpCallback: 'msdnews',
+					type: "GET",
+					success: function (data) {
+						var arr = data.list;
+						console.log(arr);
                         /**
                          * 每一次加载新内容的时候先把之前的内容清空
                          */
-                        $('#Searchresult').empty();
-                        $('#search_box').css('display', 'block');
-                        for(var i = 0; i < arr.length; i++) {
-                            $('#Searchresult').append(
-                                //请求回来的数据
-                            );
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
+						$('#Searchresult').empty();
+						$('#search_box').css('display', 'block');
+						for (var i = 0; i < arr.length; i++) {
+							$('#Searchresult').append(
+								//请求回来的数据
+							);
+						}
+					},
+					error: function (error) {
+						console.log(error);
+					}
+				});
+			}
+			console.log(client);
 		}
-		console.log(client);
+
 	</script>
 </body>
 

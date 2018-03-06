@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+    /* 组件：
+      组件的创建方式1：React.createClass(),
+      组件的属性可以在组件类的this.props对象上获取，如name属性的获取方式为:this.props.name
+      注意：
+      1）组件的首字母必须大写，
+      2）组件类只能包含一个顶层标签
+      3）class用className替代，for用htmlFor替代，因为class和for都是js的关键字
+     */
+      var HelloMessage = React.createClass({
+        render: function() {
+          return (<div>
+            <h1>Hello {this.props.name}</h1>
+            <h1>age: {this.props.age}</h1>
+          </div>);
+        }
+      });
+
+      ReactDOM.render(
+        <HelloMessage name="John" age="18"/>,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>

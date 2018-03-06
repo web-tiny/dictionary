@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>react文档学习</title>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+			/**
+			 * 文档学习过程
+			 * @param {Object} user
+			 */
+			function formatName(user) {
+				return user.firstName + ' ' + user.lastName;
+			}
+
+			const user = {
+				firstName: 'Harper',
+				lastName: 'Perez'
+			};
+
+			/**
+			 * 一般在JSX外面加上一个括号，可以防止分号自动插入的bug
+			 */
+			const element = (
+				<h1>
+    				Hello, {formatName(user)}!
+				</h1>
+			);
+
+			function getGreeting(user) {
+				if(user) {
+					return <h1>Hello,{formatName(user)} !</h1>;
+				} else {
+					return <h1>Hello,stranger </h1>;
+				}
+			}
+			const elemet = <div tabIndex="0"></div>;
+			const element1 = <img  src={user.url} />;
+			const element2 = (
+				<div className="greeting">
+		<h1> Hello !</h1>
+		<h2>Good to see you here !</h2>
+	</div>
+			);
+
+			function tick() {
+				const element = (
+					<div>
+			<h1>Hello,word !</h1>
+			<h2>It is {new Date().toLocaleTimeString()}</h2>
+		</div>
+				);
+				ReactDOM.render(
+					element,
+					document.getElementById('root')
+				);
+			}
+			//setInterval(tick,1000);
+
+			/**
+			 * 函数定义组件   组件的开头字母必须大写
+			 * @param {Object} props
+			 */
+			function Welcome(props) {
+				return <h1>Hello,{props.name}</h1>;
+			}
+
+			/**
+			 * ES6 class 定义组件
+			 */
+			class Here extends React.Component {
+				render() {
+					return <h1>Hello,{this.props.name}</h1>;
+				}
+			}
+
+			const elementName = <Welcome name="jiao Rengui"/>;
+			//ReactDOM.render(
+			//	element,
+			//	document.getElementById('root')
+			//);
+			function App2() {
+				return(
+					<div>
+			<Welcome name="Nickol"/>
+			<Welcome name="Tony"/>
+			<Welcome name="Jack"/>
+		</div>
+				);
+			}
+
+			function Avatar(props) {
+				return(
+					<img className="Avatar"
+          src={props.author.avatarUrl}
+          alt={props.author.name}
+        />
+				);
+			}
+
+			function UserInfo(props) {
+				return(
+					<div className="UserInfo">
+	        <Avatar user={props.author} />
+	        <div className="UserInfo-name">
+	          {props.author.name}
+	        </div>
+      	</div>
+				);
+			}
+
+			function Comment(props) {
+				return(
+					<div className="Comment">
+	      <UserInfo user={props.author} />
+	      <div className="Comment-text">
+	        {props.text}
+	      </div>
+	      <div className="Comment-date">
+	        {}
+	      </div>
+	    </div>
+				);
+			}
+
+			function Clock(props) {
+				return(
+					<div>
+			<h1>Hello  world </h1>
+			<h2>It is {props.date.toLocaleTimeString()}</h2>
+		</div>
+				);
+			}
+
+			function tick() {
+				ReactDOM.render(
+					<Clock />,
+					document.getElementById('root')
+				);
+			}
+
+			class Clock2 extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						date: new Date()
+					}
+				}
+
+				componentDidMount() {
+					this.timeId = setInterval(() => this.tick(), 1000);
+				}
+				componentWillUnmount() {
+					clearInterval(this.timeId);
+				}
+
+				tick() {
+					this.setState({
+						date: new Date()
+					});
+				}
+				render() {
+					return(
+						<div>
+				<h1>Hello  world </h1>
+				<h2>It is {this.state.date.toLocaleTimeString()}</h2>
+			</div>
+					);
+				}
+			}
+			//
+			//setInterval(tick,1000);
+			//tick();
+			/**
+			 * 1：JSX语法的事件处理函数需要传入一个函数作为处理函数，而不是像DOM一样传入一个字符串
+			 * 2：return false;这种方式不能阻止浏览器的默认行为，必须要明确使用preventDefault，
+			 * 3：React事件绑定属性的命名必须使用驼峰命名，而不是小写形式，
+			 */
+			function ActionLink() {
+				function handleClick(e) {
+					e.preventDefault();
+					console.log("the link is clicked !");
+				}
+
+				return(
+					<a href="#" onClick={handleClick}>
+			Click me
+		</a>
+				);
+			}
+
+			class Toggle extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						isToggleOn: true
+					};
+
+					this.handleClick = this.handleClick.bind(this);
+				}
+
+				handleClick() {
+					this.setState(preState => ({
+						isToggleOn: !preState.isToggleOn
+					}))
+				}
+				render() {
+					return(
+						<button onClick={this.handleClick}>
+				{this.state.isToggleOn ? 'ON':'OFF'}
+			</button>
+					)
+				}
+			}
+			//ReactDOM.render(
+			//	<Toggle />,
+			//	document.getElementById('root')
+			//);
+
+			/**
+			 *条件渲染 
+			 * @param {Object} props
+			 */
+			function UserGreeting(props) {
+				return(<h1>Welcome back !</h1>);
+			}
+
+			function GuestGreeting(props) {
+				return(<h1>Please Sign up !</h1>);
+			}
+
+			function Greeting(props) {
+				const isLoginIn = props.isLoginIn;
+				if(isLoginIn) {
+					return <UserGreeting />;
+				}
+				return <GuestGreeting />;
+			}
+			//ReactDOM.render(
+			//	<Greeting isLoginIn={false} />,
+			//	document.getElementById('root')
+			//)
+
+			//元素变量
+			function LoginButton(props) {
+				return(
+					<button onClick={props.onClick}>Login</button>
+				);
+			}
+
+			function LogoutButton(props) {
+				return(
+					<button onClick={props.onClick}>Logout</button>
+				);
+			}
+			class Logincontrol extends React.Component {
+				constructor(props) {
+					super(props);
+					this.handleLoginClick = this.handleLoginClick.bind(this);
+					this.handleLogoutClick = this.handleLogoutClick.bind(this);
+					this.state = {
+						isLogedIn: false
+					}
+				}
+				handleLoginClick() {
+					this.setState({
+						isLogedIn: true
+					})
+				}
+				handleLogoutClick() {
+					this.setState({
+						isLogedIn: false
+					})
+				}
+				render() {
+					const isLogedIn = this.state.isLogedIn;
+					let button = null;
+					if(isLogedIn) {
+						button = <LoginButton onClick={this.handleLoginClick} />;
+					} else {
+						button = <LogoutButton onClick={this.handleLogoutClick} />;
+					}
+
+					return(
+						<div>
+				<Greeting isLogedIn={isLogedIn} />
+				{button}
+			</div>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<Logincontrol />,
+			//	document.getElementById('root')
+			//)
+
+			/**
+			 * 阻止组件渲染
+			 * @param {Object} props
+			 */
+			function WarningBanner(props) {
+				if(!props.warn) {
+					return null;
+				}
+
+				return(
+					<div className="Warning">Warning</div>
+				);
+			}
+			class Page extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						showWarning: true
+					};
+					this.handleToggleClick = this.handleToggleClick.bind(this);
+				}
+
+				handleToggleClick() {
+					this.setState(prevState => ({
+						showWarning: !prevState.showWarning
+					}))
+				}
+				render() {
+					return(
+						<div>
+				<WarningBanner warn={this.state.showWarning} />
+				<button onClick={this.handleToggleClick}>
+				 {this.state.showWarning ? 'Hide':'Show'}
+				</button>
+			</div>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<Page />,
+			//	document.getElementById('root')
+			//)
+
+			/**
+			 *列表 & keys 
+			 */
+			const numbers = [1, 2, 3, 4, 5];
+			const listItems = numbers.map((number) =>
+				<li>{number*2}</li>
+			)
+			//ReactDOM.render(
+			//	<ul>{listItems}</ul>,
+			//	document.getElementById('root')
+			//)
+			/**
+			 * 基础列表组件：Each child in an array or iterator should have a unique "key" prop. Check the render method of `NumberList`
+			 * @param {Object} props
+			 */
+			function NumberList(props) {
+				const numbers = props.numbers;
+				const listItems = numbers.map((number) =>
+					<li key={number.toString()}>{number}</li>
+				)
+				return(<ul>{listItems}</ul>);
+			}
+			const numbers2 = [6, 7, 8, 9, 10];
+			//ReactDOM.render(
+			//	<NumberList numbers={numbers2} />,
+			//	document.getElementById('root')
+			//)
+
+			/**
+			 * 元素的key在他的兄弟元素之间应该唯一
+			 * @param {Object} props
+			 */
+			function Blog(props) {
+				const siderBar = (
+					<ul>
+			{props.post.map((post)=>
+				<li key={post.id}>
+					{post.title}
+				</li>
+			)}
+		</ul>
+				);
+				const content = props.post.map((post) =>
+					<div key={post.id}>
+			<h2>{post.title}</h2>
+			<p>{post.content}</p>
+		</div>
+				);
+				return(
+					<div>
+			{siderBar}
+			<hr/>
+			{content}
+		</div>
+				);
+			}
+			const post = [{
+					id: 1,
+					title: 'Hello World',
+					content: 'Welcome to learning React!'
+				},
+				{
+					id: 2,
+					title: 'Installation',
+					content: 'You can install React from npm.'
+				}
+			];
+			//ReactDOM.render(
+			//	<Blog post={post} />,
+			//	document.getElementById('root')
+			//)
+
+			/**
+			 *受控组件 
+			 */
+			class NameForm extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						value: ""
+					};
+					this.handleChange = this.handleChange.bind(this);
+					this.handleSubmit = this.handleSubmit.bind(this);
+				}
+				handleChange(event) {
+					this.setState({
+						value: event.target.value
+					})
+				}
+				handleSubmit(event) {
+					alert('A name was submitted: ' + this.state.value);
+					event.preventDefault();
+				}
+				render() {
+					return(
+						<form onSubmit={this.handleSubmit}>
+				<label>
+					Name:<input type="text" value={this.state.value} onChange={this.handleChange}/>
+				</label>
+				<input type="submit" value="submit"/>
+			</form>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<NameForm />,
+			//	document.getElementById('root')
+			//)
+
+			//textarea 标签
+			class AssayForm extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						value: "please write an assay about you favorite !"
+					};
+					this.handleChange = this.handleChange.bind(this);
+					this.handleSubmit = this.handleSubmit.bind(this);
+				}
+				handleChange(event) {
+					this.setState({
+						value: event.target.value
+					})
+				}
+				handleSubmit(event) {
+					alert('An assay was submitted: ' + this.state.value);
+					event.preventDefault();
+				}
+				render() {
+					return(
+						<form onSubmit={this.handleSubmit}>
+				<label>
+					Name:<textarea type="text" value={this.state.value} onChange={this.handleChange}/>
+				</label>
+				<input type="submit" value="submit"/>
+			</form>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<AssayForm />,
+			//	document.getElementById('root')
+			//)
+
+			/**
+			 * select标签
+			 */
+			class FlavorForm extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						value: "coconut"
+					};
+					this.handleChange = this.handleChange.bind(this);
+					this.handleSubmit = this.handleSubmit.bind(this);
+				}
+				handleChange(event) {
+					this.setState({
+						value: event.target.value
+					})
+				}
+				handleSubmit(event) {
+					alert('your favorite flavor is: ' + this.state.value);
+					event.preventDefault();
+				}
+				render() {
+					return(
+						<form onSubmit={this.handleSubmit}>
+				<label>
+					Pick your favorite La Croix flavor:
+					<select value={this.state.value} onChange={this.handleChange}>
+						<option value="grapefruit">Grapefruit</option>
+			            <option value="lime">Lime</option>
+			            <option value="coconut">Coconut</option>
+			            <option value="mango">Mango</option>
+					</select>
+				</label>
+				<input type="submit" value="submit"/>
+			</form>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<FlavorForm />,
+			//	document.getElementById('root')
+			//)
+
+			/**
+			 * 多个输入表单的解决方法：
+			 * 可以通过给每个元素添加一个name属性，来让处理函数根据 event.target.name的值来选择做什么。
+			 */
+			class Reservation extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						isGoing: true,
+						numberOfGuest: 2
+					};
+					this.handleInputChange = this.handleInputChange.bind(this);
+				}
+				handleInputChange(event) {
+					const target = event.target;
+					const value = target.type === 'checkbox' ? target.checked : target.value;
+					const name = target.name;
+					this.setState({
+						[name]: value
+					})
+				}
+				render() {
+					return(
+						<form onSubmit={this.handleSubmit}>
+				<label>
+					is going:
+					<input name='isGoing' type="checkbox" checked={this.state.isGoing} onChange={this.handleInputChange} />
+				</label>
+				<label>
+					Number of Guests:
+					<input type="number" name="numberOfGuest" value={this.state.numberOfGuest} onChange={this.handleInputChange}/>
+				</label>
+			</form>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<Reservation />,
+			//	document.getElementById('root')
+			//)
+			/**
+			 *状态提升：多个组件需要共用状态数据的时候，将共享的状态提升至他们最近的父组件当中进行管理，
+			 * 在React中，状态分享是通过将state数据提升至离需要这些数据的组件最近的父组件来完成的。这就是所谓的状态提升
+			 */
+			function BoilingVerdict(props) {
+				if(props.celsius >= 100) {
+					return <p>水会烧开</p>;
+				}
+				return <p>水不会烧开</p>;
+			}
+			//class Calculator extends React.Component{
+			//	constructor(props){
+			//		super(props);
+			//		this.state={temperatrue:''};
+			//		this.handleChange=this.handleChange.bind(this);
+			//	}
+			//	handleChange(event){
+			//		this.setState({
+			//			temperatrue:event.target.value
+			//		})
+			//	}
+			//	render(){
+			//		const temperatrue=this.state.temperatrue;
+			//		return (
+			//			<fieldset onSubmit={this.handleSubmit}>
+			//				<legend>请输入一个摄氏温度</legend>
+			//				<input value={temperatrue} onChange={this.handleChange}/>
+			//				<BoilingVerdict celsius={parseFloat(temperatrue)} />
+			//			</fieldset>
+			//		);
+			//	}
+			//}
+			const scaleName = {
+				c: 'Celsius',
+				f: 'Fahrenheit'
+			};
+			class TemperatureInput extends React.Component {
+				constructor(props) {
+					super(props);
+					this.handleChange = this.handleChange.bind(this);
+				}
+				handleChange(event) {
+					this.props.onTemperatureChange(event.target.value);
+				}
+
+				render() {
+					const temperature = this.props.temperature;
+					const scale = this.props.scale;
+
+					return(
+						<fieldset onSubmit={this.handleSubmit}>
+				<legend>Enter temperature in {scaleName[scale]}:</legend>
+				<input value={temperature} onChange={this.handleChange}/>
+			</fieldset>
+					);
+				}
+			}
+			class Calculator extends React.Component {
+				constructor(props) {
+					super(props);
+					this.state = {
+						temperatrue: '',
+						scale: 'c'
+					};
+					this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+					this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+				}
+				handleCelsiusChange(temperatrue) {
+					this.setState({
+						scale: 'c',
+						temperatrue
+					});
+				}
+				handleFahrenheitChange(temperatrue) {
+					this.setState({
+						scale: 'f',
+						temperatrue
+					});
+				}
+				render() {
+					const temperatrue = this.state.temperatrue;
+					const scale = this.state.scale;
+					const celsius = scale === 'c' ? tryConvert(temperatrue, toCelsius) : temperatrue;
+					const fahrenheit = scale === 'f' ? tryConvert(temperatrue, toFahrenheit) : temperatrue;
+
+					return(
+						<div>
+		       <TemperatureInput scale="c" temperatrue={celsius} onTemperatureChange={this.handleCelsiusChange}/>
+		       <TemperatureInput scale="f" temperatrue={fahrenheit} onTemperatureChange={this.handleFahrenheitChange}/>
+		       <BoilingVerdict celsius={parseFloat(celsius)} />
+		    </div>
+					);
+				}
+			}
+			/**
+			 *摄氏度与华氏度的转换 
+			 * @param {Object} Fahrenheit
+			 */
+			function toCelsius(Fahrenheit) {
+				return(Fahrenheit - 32) * 5 / 9;
+			}
+
+			function toFahrenheit(celsius) {
+				return(celsius * 9 / 5) + 32;
+			}
+
+			function tryConvert(temperatrue, convert) {
+				const input = parseFloat(temperatrue);
+				if(Number.isNaN(input)) {
+					return '';
+				}
+				const output = convert(input);
+				const rounded = Math.round(output * 1000) / 1000;
+				return rounded.toString();
+			}
+			//ReactDOM.render(
+			//	<Calculator />,
+			//	document.getElementById('root')
+			//)
+
+			function Contacts() {
+				return(<div className='Contacts'></div>);
+			}
+
+			function Chat() {
+				return(<div className='Chat'></div>);
+			}
+
+			function SliderPane(props) {
+				return(
+					<div className='SliderPane'>
+			<div className='SliderPane-left'> {props.left } </div>
+			<div className='SliderPane-right'> {props.right } </div>	
+		</div>
+				);
+			}
+
+			function App3() {
+				return(
+					<SliderPane 
+		left={
+			<Contacts />
+		}
+		right={
+			<Chat />
+		}
+		/>
+				);
+			}
+			//ReactDOM.render(
+			//	<App3 />,
+			//	document.getElementById('root')
+			//)
+			function Repeat(props) {
+				let items = [];
+				for(let i = 0; i < props.numTimes; i++) {
+					items.push(props.children(i));
+				}
+				return <div>{items}</div>;
+			}
+
+			function ListOfTenThings() {
+				return(
+					<Repeat numTimes={10}>
+      {(index) => <div key={index}>This is item {index} in the list</div>}
+    </Repeat>
+				);
+			}
+			//ReactDOM.render(
+			//	<ListOfTenThings />,
+			//	document.getElementById('root')
+			//)
+			class CustomTextInput extends React.Component {
+				constructor(props) {
+					super(props);
+					this.focus = this.focus.bind(this);
+				}
+
+				focus() {
+					// 直接使用原生 API 使 text 输入框获得焦点
+					this.textInput.focus();
+				}
+
+				render() {
+					// 使用 `ref` 的回调将 text 输入框的 DOM 节点存储到 React 
+					// 实例上（比如 this.textInput）
+					return(
+						<div>
+        <input
+          type="text"
+          ref={(input) => { this.textInput = input; }} />
+        <input
+          type="button"
+          value="Focus the text input"
+          onClick={this.focus}
+        />
+      </div>
+					);
+				}
+			}
+			//ReactDOM.render(
+			//	<CustomTextInput />,
+			//	document.getElementById('root')
+			//)
+			registerServiceWorker();
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>js review</title>
+		<style type="text/css">
+			/*超链接访问过后hover样式就不出现的问题(其实不是访问过后不出现，而是有一个默认的很难看的的颜色，在hover样式的前面加上a:visited{}即可)
+			 * 网上说的是L-V-H-A的顺序即可，
+			 * 但是经过实践，我发现只需要V-H即可，但是顺序必须不能变
+			 */
+			/*a:link {
+				color: green;
+			}*/
+			.a1:visited {
+				color: black;
+			}
+			.a1:hover {
+				color: blue;
+			}			
+			/*a1:action {
+				color: white;
+			}*/
+			.a2:hover{
+				color: #f66;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<a href="https://www.baidu.com" class="a1">a1链接</a>
+		<a href="https://www.baidu.com" class="a2">a2链接</a>
+	</body>
+
+</html>
