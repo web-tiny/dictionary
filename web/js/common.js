@@ -821,7 +821,23 @@ function throttle(method, scope) {
 		method.call(scope);
 	}, 100);
 }
-
+/** 
+* getLocationStorge函数，为了兼容只支持globleStorage的浏览器
+* 使用方法：
+* let dataStore=getLocalStorage();
+*dataStore.setItem(name,value);
+*dataStore.getItem(name);
+*dataStore.removeItem(name);
+*/
+function getLocalStorage(){
+	if (typeof localStorage == "object"){
+		return localStorage;
+	} else if (typeof globalStorage == "object"){
+		return globalStorage[location.host];
+	} else {
+		throw new Error("Local storage not available.");
+	}
+}
 var client = function () {
 	//rendering engines
 	var engine = {
