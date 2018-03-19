@@ -158,30 +158,30 @@
 	<script>
 		window.onload = function () {
 			document.getElementsByTagName("html")[0].style.fontSize = 100 * window.innerWidth / 1920 + "px";
-			console.log(_time._timestemp());
-			console.log(_time._getDateHasHorizontalLine(1498315007));
-			console.log(_time._getDateHasSlash(1498315007));
-			console.log(_time._getDateHasHoursMinutesSecondes(1498315007));
-			console.log(_time._getDateNoMilliSecond(1498315007));
+			console.log(TimeUtility._timestemp());
+			console.log(TimeUtility._getDateHasHorizontalLine(1498315007));
+			console.log(TimeUtility._getDateHasSlash(1498315007));
+			console.log(TimeUtility._getDateHasHoursMinutesSecondes(1498315007));
+			console.log(TimeUtility._getDateNoMilliSecond(1498315007));
 			$(".userName").keyup(function () {
-				if (_time._isChinaName($(".userName").val()) == true) {
+				if (TimeUtility._isChinaName($(".userName").val()) == true) {
 					console.log($(".userName").val());
-				} else if (_time._isChinaName($(".userName").val()) == false) {
+				} else if (TimeUtility._isChinaName($(".userName").val()) == false) {
 					console.log("请输入正确格式的姓名");
 				}
 			})
-			console.log(_time._getTimeDaysLater(2));
+			console.log(TimeUtility._getTimeDaysLater(2));
 
 			var url = "https://cdn.bootcss.com/jquery/1.12.2/jquery.min.js?name=jiaoRengui&age=18&formWhere=guizhou";
-			console.log(_url._getQueryString("__hbt"));
+			console.log(UrlUtility._getQueryString("__hbt"));
 
 			var aa = 1;
-			console.log(_empty._isEmpty(aa));
+			console.log(EmptyUtility._isEmpty(aa));
 
 			var bb = 1;
 			var cc = 2;
 			var dd = 1
-			console.log(_empty._isEmptyArray([bb, cc, dd]));
+			console.log(EmptyUtility._isEmptyArray([bb, cc, dd]));
 
 			/**
 			 * 弹层验证实例
@@ -209,7 +209,7 @@
 			$(".sendBtn").click(function () {
 				var send = document.getElementsByClassName('sendBtn')[0];
 				// var time=document.getElementsByClassName('time')[0];
-				_countdown._timer(send, 60);
+				CountdownUtility._timer(send, 60);
 			})
 
 			/**
@@ -219,7 +219,7 @@
 			function bindEvent() {
 				alert("bind event example successful!");
 			}
-			_event._addHandler(bindEventElement, 'click', bindEvent);
+			EventUtility._addHandler(bindEventElement, 'click', bindEvent);
 			//		common._removeHandler(bindEventElement,'click',bindEvent);
 
 			/**
@@ -228,10 +228,10 @@
 			 */
 			var eventTarget = document.getElementById("eventTarget");
 			eventTarget.onclick = function (e) {
-				event = _event._getEvent(e);
-				var target = _event._getTarget(e);
+				event = EventUtility._getEvent(e);
+				var target = EventUtility._getTarget(e);
 				alert("get event target successful and target element is:" + target.tagName);
-				_event._stopPropagation(e);
+				EventUtility._stopPropagation(e);
 			}
 			//		document.body.onclick=function(){
 			//			alert("body clicked !");
@@ -242,18 +242,18 @@
 			 * */
 			var preventDefaultElement = document.getElementById("preventDefaultElement");
 			preventDefaultElement.onclick = function (e) {
-				event = _event._getEvent(e);
-				var target = _event._getTarget(e);
-				_event._preventDefault(e);
-				_event._stopPropagation(e);
+				event = EventUtility._getEvent(e);
+				var target = EventUtility._getTarget(e);
+				EventUtility._preventDefault(e);
+				EventUtility._stopPropagation(e);
 			}
 
 			/**
 			 * 鼠标滚轮事件实例
 			 */
-			_event._addHandler(document, 'mousewheel', function (e) {
-				event = _event._getEvent(e);
-				alert(_event._getWheelDelta(e));
+			EventUtility._addHandler(document, 'mousewheel', function (e) {
+				event = EventUtility._getEvent(e);
+				alert(EventUtility._getWheelDelta(e));
 			});
 
 			/**
@@ -261,28 +261,28 @@
 			 * @type {Element}
 			 */
 			var relatedTargetElement = document.getElementById("relatedTarget");
-			_event._addHandler(relatedTargetElement, 'mouseover', function (e) {
-				event = _event._getEvent(e);
-				var target = _event._getTarget(e);
-				var relatedElement = _event._getRelatedTarget(e);
+			EventUtility._addHandler(relatedTargetElement, 'mouseover', function (e) {
+				event = EventUtility._getEvent(e);
+				var target = EventUtility._getTarget(e);
+				var relatedElement = EventUtility._getRelatedTarget(e);
 				alert(" moused out of " + target.tagName + " to " + relatedElement.tagName);
 			});
 
 			/**
 			 * 获取字符编码实例
 			 */
-			_event._addHandler(window, 'keypress', function (e) {
-				event = _event._getEvent(e);
-				alert(_event._getCharCode(e));
+			EventUtility._addHandler(window, 'keypress', function (e) {
+				event = EventUtility._getEvent(e);
+				alert(EventUtility._getCharCode(e));
 			})
 
 			/**
 			 * 通过mousedown事件得知用户是鼠标左击/鼠标滑轮按钮/鼠标右击实例
 			 */
 			var getButton = document.getElementById("getButton");
-			_event._addHandler(getButton, 'mousedown', function (e) {
-				event = _event._getEvent(e);
-				alert(_event._getButton(e));
+			EventUtility._addHandler(getButton, 'mousedown', function (e) {
+				event = EventUtility._getEvent(e);
+				alert(EventUtility._getButton(e));
 			})
 
 			/**
@@ -388,7 +388,7 @@
 			}
 			console.log(client);
 		}
-
+		console.log("最全身份证验证："+FormUtility._checkID("522428198910050030"))
 	</script>
 </body>
 

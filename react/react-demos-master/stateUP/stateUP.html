@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>状态提升</title>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    /**
+     * 人民币转换为美元
+     * @param number
+     * @returns {*}
+     * @constructor
+     */
+    function RmbChangetoUsd(number){
+        return number.parseFloat(number*6.327);
+    }
+    /**
+     * 美元转换为人民币
+     * @param number
+     * @returns {*}
+     * @constructor
+     */
+    function UsdChangetoRmb(number){
+        return number.parseFloat(number/6.327);
+    }
+    /**
+     * 转换函数
+     * @param number
+     * @param convert
+     * @returns {string}
+     */
+    function valueConert(number,convert){
+        const input=parseFloat(number);
+        if(Number.isNaN(input)){
+            alert("格式不正确，请输入数字！");
+        }
+        const output=convert(input);
+        const rounded=Math.round(output*1000)/1000;
+        return rounded.toString();
+    }
+
+    //摄氏度和华氏度的两个标识
+    const scaleNames = {
+        c: 'Celsius',
+        f: 'Fahrenheit'
+    };
+    //摄氏度
+    function toCelsius(fahrenheit) {
+        return (fahrenheit - 32) * 5 / 9;
+    }
+    //华氏度
+    function toFahrenheit(celsius) {
+        return (celsius * 9 / 5) + 32;
+    }
+
+    function tryConvert(temperature, convert) {
+        const input = parseFloat(temperature);
+        if (Number.isNaN(input)) {
+            return '';
+        }
+        const output = convert(input);
+        const rounded = Math.round(output * 1000) / 1000;
+        return rounded.toString();
+    }
+
+    function BoilingVerdict(props) {
+        if (props.celsius >= 100) {
+            return <p>The water would boil.</p>;
+        }
+        return <p>The water would not boil.</p>;
+    }
+
+    class TemperatureInput extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleChange = this.handleChange.bind(this);
+        }
+
+        handleChange(e) {
+            this.props.onTemperatureChange(e.target.value);
+        }
+
+        render() {
+            const temperature = this.props.temperature;
+            const scale = this.props.scale;
+            return (
+                    <fieldset>
+                        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+                        <input value={temperature}
+                               onChange={this.handleChange} />
+                    </fieldset>
+            );
+        }
+    }
+
+    class Calculator extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+            this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+            this.state = {temperature: '', scale: 'c'};
+        }
+
+        handleCelsiusChange(temperature) {
+            this.setState({scale: 'c', temperature});
+        }
+
+        handleFahrenheitChange(temperature) {
+            this.setState({scale: 'f', temperature});
+        }
+
+        render() {
+            const scale = this.state.scale;
+            const temperature = this.state.temperature;
+            const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+            const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+
+            return (
+                    <div>
+                        <TemperatureInput
+                                scale="c"
+                                temperature={celsius}
+                                onTemperatureChange={this.handleCelsiusChange} />
+                        <TemperatureInput
+                                scale="f"
+                                temperature={fahrenheit}
+                                onTemperatureChange={this.handleFahrenheitChange} />
+                        <BoilingVerdict
+                                celsius={parseFloat(celsius)} />
+                    </div>
+            );
+        }
+    }
+
+//    ReactDOM.render(
+//            <Calculator />,
+//        document.getElementById('root')
+//    );
+
+    function Item(props) {
+        return <li>{props.message}</li>;
+    }
+
+    function TodoList() {
+        const todos = ['finish doc', 'submit pr', 'nag dan to review'];
+        return (
+                <ul>
+                    {todos.map((message) => <Item key={message} message={message} />)}
+                </ul>
+        );
+    }
+//    ReactDOM.render(
+//            <TodoList />,
+//        document.getElementById('root')
+//    );
+    class CustomTextInput extends React.Component {
+        constructor(props) {
+            super(props);
+            this.focus = this.focus.bind(this);
+        }
+
+        focus() {
+            // 通过使用原生API，显式地聚焦text输入框
+            this.textInput.focus();
+        }
+
+        render() {
+            // 在实例中通过使用`ref`回调函数来存储text输入框的DOM元素引用(例如:this.textInput)
+            return (
+                    <div>
+                        <input
+                                type="text"
+                                ref={(input) => { this.textInput = input; }} />
+                        <input
+                                type="button"
+                                value="Focus the text input"
+                                onClick={this.focus}
+                        />
+
+                    </div>
+            );
+        }
+    }
+    ReactDOM.render(
+            <CustomTextInput />,
+        document.getElementById('root')
+    );
+</script>
+</body>
+</html>
