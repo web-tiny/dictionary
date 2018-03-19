@@ -295,7 +295,7 @@ let UrlUtility = {
 	},
 };
 /**
- * 判断参数，数组，url是否为空
+ * 判断参数，数组，url指定参数是否为空
  */
 let EmptyUtility = {
 	/**
@@ -303,7 +303,7 @@ let EmptyUtility = {
 	 * @param {Object} params
 	 */
 	_isEmpty: function(params) {
-		if(typeof(params) == "undefined" || typeof(params) == "NaN" || params == "" || params == null || params == "undefined") {
+		if(typeof (params) == "undefined" || typeof(params) == "NaN" || params == "" || params == null || params == "undefined") {
 			return true;
 		}
 		return false;
@@ -336,7 +336,7 @@ let EmptyUtility = {
 				var temp = array[i].split("=");
 				paramsArray.push(temp[1]);
 			}
-			return empty._isEmptyArray(paramsArray);
+			return EmptyUtility._isEmptyArray(paramsArray);
 		}
 		return false;
 	}
@@ -790,14 +790,14 @@ var DragDropUtility = function() {
 	};
 	//public interface
 	dragdrop.enable = function() {
-		_event._addHandler(document, "mousedown", handleEvent);
-		_event._addHandler(document, "mousemove", handleEvent);
-		_event._addHandler(document, "mouseup", handleEvent);
+		EventUtility._addHandler(document, "mousedown", handleEvent);
+		EventUtility._addHandler(document, "mousemove", handleEvent);
+		EventUtility._addHandler(document, "mouseup", handleEvent);
 	};
 	dragdrop.disable = function() {
-		_event._addHandler(document, "mousedown", handleEvent);
-		_event._addHandler(document, "mousemove", handleEvent);
-		_event._addHandler(document, "mouseup", handleEvent);
+		EventUtility._addHandler(document, "mousedown", handleEvent);
+		EventUtility._addHandler(document, "mousemove", handleEvent);
+		EventUtility._addHandler(document, "mouseup", handleEvent);
 	};
 	return dragdrop;
 }();

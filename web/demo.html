@@ -89,13 +89,14 @@
 			font-size: 12px;
 			height: 30px;
 			line-height: 30px;
+			visibility: hidden;
 		}
 	</style>
 </head>
 
 <body>
-	<form style="display: none">
-		<div>
+	<form style="display: none;">
+		<div >
 			<span>用户名:</span>
 			<input type="text" name="userName" class="userName" placeholder="您的账户名或登录名">
 		</div>
@@ -123,10 +124,7 @@
 		<div id="phonenoVerification">
 			<span>手机验证码:</span>
 			<input type="text" class="phonenoVerification" placeholder="请输入手机验证码">
-			<div class="startTime">
-				<span class="send sendAndTime">发送验证码</span>
-				<span style="display: none;" class="time sendAndTime">60S</span>
-			</div>
+			<!--<input type="button" value="发送验证码" class="sendBtn sendAndTime">-->
 		</div>
 		<div id="nowRegist">立即注册</div>
 	</form>
@@ -157,12 +155,13 @@
 	<script src="https://cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
 	<script>
 		window.onload = function () {
-			document.getElementsByTagName("html")[0].style.fontSize = 100 * window.innerWidth / 1920 + "px";
-			console.log(TimeUtility._timestemp());
-			console.log(TimeUtility._getDateHasHorizontalLine(1498315007));
-			console.log(TimeUtility._getDateHasSlash(1498315007));
-			console.log(TimeUtility._getDateHasHoursMinutesSecondes(1498315007));
-			console.log(TimeUtility._getDateNoMilliSecond(1498315007));
+			var timestemp=TimeUtility._timestemp();
+			console.log(timestemp);
+			console.log(TimeUtility._getDateHasHorizontalLine(timestemp));
+			console.log(TimeUtility._getDateHasSlash(timestemp));
+			console.log(TimeUtility._getDateHasHoursMinutesSecondes(timestemp));
+			console.log(TimeUtility._getDateNoMilliSecond(timestemp));
+			console.log("9天以后的时间："+TimeUtility._getTimeDaysLater(9));
 			$(".userName").keyup(function () {
 				if (TimeUtility._isChinaName($(".userName").val()) == true) {
 					console.log($(".userName").val());
@@ -170,24 +169,24 @@
 					console.log("请输入正确格式的姓名");
 				}
 			})
-			console.log(TimeUtility._getTimeDaysLater(2));
+			console.log("获取url中name的值："+UrlUtility._getQueryString("__hbt"));
 
-			var url = "https://cdn.bootcss.com/jquery/1.12.2/jquery.min.js?name=jiaoRengui&age=18&formWhere=guizhou";
-			console.log(UrlUtility._getQueryString("__hbt"));
-
-			var aa = 1;
-			console.log(EmptyUtility._isEmpty(aa));
+			var aa = false;
+			console.log("判断变量a是否为空："+EmptyUtility._isEmpty(aa));
 
 			var bb = 1;
 			var cc = 2;
-			var dd = 1
-			console.log(EmptyUtility._isEmptyArray([bb, cc, dd]));
-
+			var dd = undefined;
+			var ee= 9;
+			var  arr=[ee,bb,cc,dd];
+			console.log("判断数组是否为空："+EmptyUtility._isEmptyArray(arr));
+			
+			console.log("判断url参数__hbt是否为空："+UrlUtility._getQueryString("__hbt"));
 			/**
 			 * 弹层验证实例
 			 */
 			function bounce() {
-				var bounce = new _PopupWindow._bounceModule({
+				var bounce = new PopupWindowUtility._PopupLayout({
 					id: 'select1',//增加弹层的唯一标识，如果存在则删除在生成，避免重复生成，主要兼容一个页面中有多个弹层
 					title: '温馨提示',
 					content: '<p>亲爱的用户：</p><p style="text-indent:2em;">您还未实名认证，请先进行实名认证再预约！</p>',
