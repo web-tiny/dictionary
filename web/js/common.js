@@ -162,7 +162,7 @@ let FormUtility = {
 	 * 出生日期校验
 	 * @param {Object} val
 	 */
-	_checkDate:function(val) {
+	_checkDate: function(val) {
 		var pattern = /^(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)$/;
 		if(pattern.test(val)) {
 			var year = val.substring(0, 4);
@@ -179,7 +179,7 @@ let FormUtility = {
 	 * 省级地址码校验
 	 * @param {Object} val
 	 */
-	_checkProv:function(val) {
+	_checkProv: function(val) {
 		var pattern = /^[1-9][0-9]/;
 		var provs = {
 			11: "北京",
@@ -228,7 +228,7 @@ let FormUtility = {
 	 * 身份证号校验
 	 * @param {Object} val
 	 */
-	_checkID:function(val) {
+	_checkID: function(val) {
 		if(FormUtility._checkCode(val)) {
 			var date = val.substring(6, 14);
 			if(FormUtility._checkDate(date)) {
@@ -303,7 +303,7 @@ let EmptyUtility = {
 	 * @param {Object} params
 	 */
 	_isEmpty: function(params) {
-		if(typeof (params) == "undefined" || typeof(params) == "NaN" || params == "" || params == null || params == "undefined") {
+		if(typeof(params) == "undefined" || typeof(params) == "NaN" || params == "" || params == null || params == "undefined") {
 			return true;
 		}
 		return false;
@@ -950,6 +950,28 @@ function getLocalStorage() {
 		throw new Error("Local storage not available.");
 	}
 }
+/**
+ * 数组去重递归法
+ * ES6法：function unique1(arr) {return Array.from(new Set(arr));}
+ * function unique2(arr) {return [...new Set(arr)];}
+ * @param {Object} arr
+ */
+function uniqueArr(arr) {
+	arr.sort(function(a, b) { //对数组进行排序才能方便比较
+		return b - a;
+	})
+	function loop(index) {
+		if(index >= 1) {
+			if(arr[index] === arr[index - 1]) {
+				arr.splice(index, 1);
+			}
+			loop(index - 1); //递归loop函数进行去重
+		}
+	}
+	loop(arr.length - 1);
+	return arr;
+}
+
 var client = function() {
 	//rendering engines
 	var engine = {
