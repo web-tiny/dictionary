@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body onload="draw();">
+    <canvas id="canvas" height="1000px" width="1000px"></canvas>
+    <script>
+        let draw=function(){
+            let canvas=document.getElementById('canvas');
+            if(canvas.getContext){
+                let ctx=canvas.getContext('2d');
+                /**@argument
+                 * 绘制矩形
+                 * */
+                ctx.fillStyle='red';
+                ctx.fillRect(20,20,100,100);
+
+                ctx.fillStyle='blue';
+                ctx.fillRect(40,40,100,100);
+
+                ctx.fillStyle='black';
+                ctx.strokeRect(50,50,60,60);
+                ctx.clearRect(50,50,60,60);
+                
+                /**@argument
+                 * 绘制三角形
+                 * */
+                ctx.beginPath();
+                ctx.moveTo(75,50);
+                ctx.lineTo(100,75);
+                ctx.lineTo(100,25);
+                ctx.fill();
+                /* ctx.fill()能自动闭合线路劲，所以不用ctx.closePath() */
+                ctx.beginPath();
+                ctx.moveTo(125,125);
+                ctx.lineTo(225,125);
+                ctx.lineTo(125,225);
+                ctx.fill();
+                
+                 /* ctx.stroke()不能自动闭合线路劲，所以必须使用ctx.closePath()闭合路劲，否则只有两条线 */
+                ctx.beginPath();
+                ctx.moveTo(235,235);
+                ctx.lineTo(235,335);
+                ctx.lineTo(135,335);
+                ctx.closePath();
+                ctx.stroke();
+
+                /* 画圆：ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise) 
+                * x/y为圆心，radius为半径，startAngle/endAngle圆弧的起终位置，anticlockwise，默认为顺时针，当值为true时为逆时针
+                */
+                ctx.beginPath();
+                ctx.arc(400,400,150,0,Math.PI*2,true);
+                ctx.closePath();
+                ctx.stroke();
+            }
+        };
+    </script>
+</body>
+</html>
