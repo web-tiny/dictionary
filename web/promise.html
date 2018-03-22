@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>promise</title>
+	</head>
+	<body>
+		<script>
+			/**关于promise，新手常见错误：
+			 * 1： promise版的金字塔问题
+			 * 2：用了 promises 后怎么用 forEach?用Promise.all()替代，它返回一个新的Promise,
+			 * 3：忘记使用 .catch(),一定要加上catch,因为如果没有，一旦有错误就会被吃掉，很难定位bug位置，你就完蛋了
+			 * 4：使用 "deferred"，不要用它
+			 * 5：使用副作用调用而非返回,像下面这样：
+			 * somePromise().then(function(){
+			 * 	someOtherPromise()  正确的姿势是这样的：return someOtherPromise()
+			 * }).then(function(){...}).then(function(){}).catch(function(){})
+			 * 
+			 * 
+			 * Promise的奇妙之处在于给了我们return 和throw，这是什么情况呢？
+			 * 每一个promise会提供一个then()方法/catch(),其实catch()就是then(null,...)的语法糖
+			 * 那promise可以做什么呢？
+			 * 1.return 另一个promise：
+			 * getUserByName('tiny').then(function(user){
+			 * //下面这个return非常之重要，如果不写getUserAccountById()变回成为一个副作用，且下一个函数将会接收到undefined，而不是userAccount
+			 * 	return getUserAccountById(user.id);
+			 * }).then(function(userAccount){
+			 * 	//i got a user account
+			 * })
+			 * 
+			 * 2.return一个同步的值或者undefined
+			 * 3.throw一个同步的异常:
+			 * promise更加赞的一点是有throw，比如我们希望用户在登陆时，抛出一个异常:
+			 * getUserByName('tiny').then((user)=>{
+			 * 	if(user.isLoggedOut()){
+			 * 		throw new Error('user logged out');//thow a synchronous error
+			 * 	}
+			 * 	if(inMemoryCache[user.id]){
+			 * 		return inMemoryCache[user.id] //return a synchronous value!
+			 *  }
+			 * 	return getUserAccountById(user.id);//return a promise
+			 * }).then((userAccount)=>{
+			 * 	
+			 * }).catch((err)=>{
+			 * 	
+			 * })
+			 * 
+			 * 进阶错误：
+			 * 1：不知道 Promise.resolve():
+			 * promises 在封装同步与异步代码时非常的有用,如果你写出下面这样的代码：
+			 * new Promise((resolve,reject)=>{
+			 * 	resolve(someSynchronousValue);
+			 * }).then()
+			 * 你会发现像下面这样写更加简洁：
+			 * Promise.resolve(someSynchronousValue).then()
+			 * 它在用来捕获同步异常时也极其好用，所以要养成在所有promise形式的api接口中这样使用它：
+			 * function somePromiseAPI(){
+			 * 	 return Promise.resolve().then(()=>{
+			 * 		doSomethingThatMayThrow();
+			 * 		return 'foo';
+			 * 	}).then()
+			 * }
+			 * 切记：任何可能throw同步异常代码都可能导致后续的bug无法调试，但是如果将所有的代码都使用
+			 * Promise.resolve(),那么总是可以在后续中使用catch()捕获它,
+			 * 那就是用Promise.reject()返回一个立刻返回失败的promise
+			 * 
+			 * 2：catch() 与 then(null, ...) 并非完全等价
+			 * catch()仅仅是一个语法糖，所以下面两段代码是等价的：
+			 * somePromise().catch((err)=>{})
+			 * somePromise().then((null,(err)=>{}))
+			 * 
+			 * 然而，这并不意味着下面两段代码是等价的：
+			 * somePromise().then(()=>{
+			 * 	someOtherPromise();
+			 * }).catch((err)=>{
+			 * 	
+			 * })
+			 * 
+			 * somePromise().then(()=>
+			 * 	someOtherPromise()
+			 * ,(err)=>{
+			 * 	
+			 * })
+			 * 为什么不相等，可以这样思考，当第一个函数抛出异常的时候会发生什么事情呐
+			 * somePromise().then(()=>{
+			 * 	throw new Error('omg error')
+			 * }).catch((err)=>{
+			 * 	//I catch you error
+			 * })
+			 * 
+			 * somePromise().then(()=>
+			 * 	throw new Error('omg error')
+			 * ,(err)=>{
+			 * 		//I can not catch you error
+			 * }) 
+			 * 所以，当你使用then(resolveHandler,rejectHandler)时,rejectHandler并不会捕获resolveHandler引发的错误，所以要养成一个习惯，尽量不要使用then的第二个参数，用catch替代
+			 * 
+			 * 3：promises vs promises factories(尴尬的是这个什么玩意，没看懂)
+			 * 
+			 * 4：如果我希望获得两个 promises 的结果怎么办？
+			 * 5：promises 穿透
+			 */
+			
+			function runAsync() {
+				return new Promise(function(resolve, reject) {
+					console.log("async work1 Done success!");
+					resolve("The data1 what you want");
+				});
+			}
+
+			function runAsync2() {
+				return new Promise(function(resolve, reject) {
+					console.log("async work2 Done success!");
+					resolve("The data2 what you want");
+				});
+			}
+
+			function runAsync3() {
+				return new Promise(function(resolve, reject) {
+					console.log("async work3 Done success!");
+					resolve("The data3 what you want");
+				});
+			}
+			
+			function isLoggedOut(boolean){
+				return boolean;
+			}
+			function inMomeryCache(id){
+				return id==id? id:100;
+			}
+			
+			runAsync().then(function(data) {
+				console.log("the data of runAsync():"+data);
+				/**
+				 * throw一个同步的异常
+				 * 如果用户已经登出，我们的 catch() 会接收到一个同步异常
+				 * 这个函数并不需要关心这个异常是同步还是异步返回的
+				 */
+				if(isLoggedOut(true)) {
+					throw new Error("user logged out!")
+				}
+				/**
+				 * return一个同步的值
+				 */
+				if(inMomeryCache(1)) {
+					return inMomeryCache(1);
+				}
+				/**返回另一个promise
+				 * 如果没写return，那runAync2就会成为一个副作用，且下一个函数会接受到undefined，而不是data
+				 * 
+				 */
+				return inMomeryCache(id);
+			}).then(function(data) {
+				console.log("the data of inMomeryCache(id)"+data);
+				return runAsync2();
+			}).then(function(data) {
+				console.log("the data of runAsync2()"+data);
+			}).catch(function(error) {
+				console.log("isLoggedOut(true) throw a error:"+error); //throw一个同步异常
+			})
+
+			/**
+			 * Promise.all()
+			 */
+			Promise.all([runAsync(), runAsync2(), runAsync3()])
+				.then(function(results) {
+					console.log("the data of promise all():"+results);
+				})
+
+			/**
+			 * Promise.race()
+			 */
+			Promise.race([runAsync(), runAsync2(), runAsync3()])
+				.then(function(results) {
+					console.log("the data of promise race():"+results);
+				})
+					
+			function getNumber() {
+				var _promise2 = new Promise(function(resolve, reject) {
+					setTimeout(function() {
+						var num = Math.ceil(Math.random() * 10);
+						if(num <= 5) {
+							resolve(num);
+						} else {
+							reject("the number is too big!")
+						}
+					}, 2000)
+				})
+				return _promise2;
+			}
+			getNumber().then(function(data) {
+				console.log('resolved')
+				console.log("getNumber() resolved"+data);
+			}, function(data) {
+				console.log('reject');
+				console.log("getNumber() rejected"+data);
+				console.log(somedata);
+
+			}).catch(function(reason) {
+				console.log("getNumber()"+reason);
+			})
+
+			/**
+			 * 下面两种写法有何区别:
+			 * 当使用then(resolveHandle,rejectHandle)这种形式时，rejectHandle并不会捕获resolveHandle引发的异常
+			 * 所以推荐使用第一种方式
+			 */
+			getNumber().then(function() {
+				return runAsync();
+				throw new Error("oh notes");
+			}).catch(function(err) {
+				//handle error
+				//I cautch you error
+				console.log("getNumber()"+err);
+			})
+			
+			getNumber().then(function() {
+				return runAsync();
+				throw new Error("oh notes");
+			}, function(err) {
+				//handle error
+				//I don't catch you error
+				console.log(err);
+			})
+			
+			
+			/**Promise穿透
+			 * 下面的结果居然不是bar，而是“foo”
+			 * 发生这个的原因是如果你向 then() 传递的并非是一个函数（比如 promise），它实际上会将其解释为 then(null)，这就会导致前一个 promise 的结果会穿透下面。简单的说，你可以直接传递一个 promise 到 then() 函数中，但是它并不会按照你期望的去执行。
+			 */
+			Promise.resolve('foo')
+			.then(Promise.resolve('bar'))
+			.then(function(result) {
+				console.log(result); //foo
+			});
+			Promise.resolve('foo')
+			.then(null)
+			.then(null)
+			.then(function(result) {
+				console.log(result); //foo
+			})
+			
+			Promise.resolve('foo').then(()=>
+				Promise.resolve('bar')
+			).then((result)=>console.log(result));//bar
+			/**
+			 * 想要得到"bar"的结果，可以这样做,因此记住：永远都是往 then() 中传递函数！
+			 */
+			Promise.resolve("foo").then(function() {
+				return Promise.resolve("bar");
+			}).then(function(result) {
+				console.log(result); //"bar"
+			})
+			
+			/**
+			 * promise原文链接
+			 * https://mp.weixin.qq.com/s?__biz=MzIyMzAwNzExNg==&mid=209354478&idx=1&sn=edd70e826b6f9e8a570024f431c5f7fe&scene=1&key=c76941211a49ab58efed75a0405e3ca61338952103fe9eabf8528d801906e4522737274eecca5489d635a5c1aa5d8b12&ascene=0&uin=MTYxMDY3MjU1&devicetype=iMac+MacBookPro11%2C3+OSX+OSX+10.10.4+build(14E46)&version=11020113&pass_ticket=ws1Ar8vSXgH8%2FuRvUaFkiKCA57pR8100%2BhwA5Ifuc00%3D
+			 */
+		</script>
+	</body>
+
+</html>
