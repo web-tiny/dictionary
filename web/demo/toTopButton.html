@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>toTopButton</title>
+    <style>
+        body {
+            height: 2000px;
+            width: 100%;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        ; (function () {
+            var EventUtility = {
+                _addHandler: function (element, type, handler) {
+                    if (element.addEventListener) {
+                        element.addEventListener(type, handler, false);
+                    } else if (element.attachEvent) { //兼容IE
+                        element.attachEvent("on" + type, handler);
+                    } else { //DOM0级事件绑定
+                        element["on" + type] = handler;
+                    }
+                }
+            };
+            var bodyEle = document.getElementsByTagName('body')[0];
+            bodyEle.setAttribute('id', 'toTopButton');
+            var divEle = document.createElement('div');
+            var spanEle = document.createElement('span');
+            var aEle = document.createElement('a');
+            aEle.setAttribute('href', '#toTopButton');
+
+            divEle.style.cssText = `height: 50px;width:50px;position: fixed;bottom: 100px; right: 100px;background: #000;
+                text-align: center;opacity: .3;border-radius:10px;color:#fff;font-size:14px;cursor:pointer`;
+            spanEle.style.cssText = ` margin-top: 17px; display: inline-block;width: 15px;height: 15px;transform: rotate(-45deg);
+                border-top: 2px solid #fff;border-right: 2px solid #fff;`;
+
+            aEle.appendChild(spanEle);
+            divEle.appendChild(aEle);
+            bodyEle.appendChild(divEle);
+            EventUtility._addHandler(divEle, 'mouseenter', mouseenterHandler);
+            EventUtility._addHandler(divEle, 'mouseleave', mouseleaveHandler);
+            var scrollTimer = null;
+            bodyEle.onscroll = function () {
+                if (scrollTimer) {
+                    clearTimeout(scrollTimer);
+                }
+                scrollTimer = setTimeout(function () {
+                    var scrollTopValue = scroll(bodyEle).top;
+                    if (scrollTopValue > 500) {
+                        divEle.style.display = "block";
+                    } else {
+                        divEle.style.display = "none";
+                    }
+                }, 100)
+            };
+            function mouseenterHandler() {
+                divEle.innerHTML = "返回顶部";
+            }
+            function mouseleaveHandler() {
+                divEle.innerHTML = "";
+                divEle.appendChild(spanEle);
+            }
+            function scroll(element) {
+                if (window.pageYOffset != null) {
+                    return {
+                        left: element.pageXOffset || window.pageXOffset,
+                        top: element.pageYOffset || window.pageYOffset
+                    }
+                } else if (document.compatMode == 'CSS1Compat') {
+                    return {
+                        left: element.scrollLeft || document.documentElement.scrollLeft,
+                        top: element.scrollTop || documentElement.scrollTop
+                    }
+                }
+                return {
+                    left: element.scrollLeft || document.body.scrollLeft,
+                    top: element.scrollLeft || document.body.scrollTop
+                }
+            }
+        })();
+    </script>
+</body>
+
+</html>
