@@ -7,17 +7,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>toTopButton</title>
     <style>
-        body {
+        p {
             height: 2000px;
             width: 100%;
             background: red;
+        }
+        .firstEl{
+            height: 100px;
+            width: 100%;
+            background: #f66;
+            
         }
     </style>
 </head>
 
 <body>
+    <div item="1" class="firstEl"></div>
+    <p></p>
     <script>
-        ; (function () {
+        ;(function () {
             var EventUtility = {
                 _addHandler: function (element, type, handler) {
                     if (element.addEventListener) {
@@ -29,21 +37,21 @@
                     }
                 }
             };
-            var bodyEle = document.getElementsByTagName('body')[0];
-            bodyEle.setAttribute('id', 'toTopButton');
+            var bodyEle = document.getElementsByTagName("body")[0];
+            var bodyFirstEle=bodyEle.firstChild.nextSibling;
             var divEle = document.createElement('div');
             var spanEle = document.createElement('span');
             var aEle = document.createElement('a');
             aEle.setAttribute('href', '#toTopButton');
-
+            bodyFirstEle.setAttribute('id', 'toTopButton');
+            aEle.appendChild(spanEle);
+            divEle.appendChild(aEle);
+            bodyEle.appendChild(divEle);
             divEle.style.cssText = `height: 50px;width:50px;position: fixed;bottom: 100px; right: 100px;background: #000;
                 text-align: center;opacity: .3;border-radius:10px;color:#fff;font-size:14px;cursor:pointer`;
             spanEle.style.cssText = ` margin-top: 17px; display: inline-block;width: 15px;height: 15px;transform: rotate(-45deg);
                 border-top: 2px solid #fff;border-right: 2px solid #fff;`;
-
-            aEle.appendChild(spanEle);
-            divEle.appendChild(aEle);
-            bodyEle.appendChild(divEle);
+            aEle.style.cssText=`color:#fff;text-decoration:none;`;
             EventUtility._addHandler(divEle, 'mouseenter', mouseenterHandler);
             EventUtility._addHandler(divEle, 'mouseleave', mouseleaveHandler);
             var scrollTimer = null;
@@ -61,12 +69,12 @@
                 }, 100)
             };
             function mouseenterHandler() {
-                divEle.innerHTML = "返回顶部";
-            }
+                aEle.innerHTML = "返回顶部";
+            };
             function mouseleaveHandler() {
-                divEle.innerHTML = "";
-                divEle.appendChild(spanEle);
-            }
+                aEle.innerHTML = "";
+                aEle.appendChild(spanEle);
+            };
             function scroll(element) {
                 if (window.pageYOffset != null) {
                     return {
@@ -83,7 +91,7 @@
                     left: element.scrollLeft || document.body.scrollLeft,
                     top: element.scrollLeft || document.body.scrollTop
                 }
-            }
+            };
         })();
     </script>
 </body>
