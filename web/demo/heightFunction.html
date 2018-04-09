@@ -19,9 +19,16 @@
         });
         console.log(arrMoreNine);//[9, 78, 23]
 
-        //arr.filter(()=>...)
+        //arr.filter(()=>{}[,thisArg]) this为可选
+        /* 
+        arr.filter(fn)/arr.map(fn)的区别：
+        arr.filter(fn)一个新的通过测试的元素的集合的数组
+        arr.map(fn) 返回一个新数组，每个元素都是回调函数的结果 
+         */
         let lesssNine=arr.filter(val=>val<9);
         console.log(lesssNine);//[4, 1, 5]
+        let mapLessNine=arr.map(currentVal=>currentVal<9);
+        console.log(mapLessNine);//[false, true, true, true, false, false]
         
         /* arr.map((currentValue,index,arr)=>{},[,thisArg])
         1:this可选
@@ -29,6 +36,8 @@
          */
         let mulValue=arr.map(val=>val*2);
         console.log(mulValue);//[18, 8, 2, 10, 156, 46]
+        let filtermulValue=arr.filter(val=>val*2);
+        console.log(filtermulValue);//[9, 4, 1, 5, 78, 23]
 
         /* 
         arr.reduce(function(preValue,currValue,index,arr){})
@@ -45,7 +54,7 @@
         console.log(oneArr);   //[0, 1, 2, 4, 5, 9, 5, 70, 20]    
         //3:数组去重
         let arr2=[1,2,2,34,34,56,56,7,8,0,6,9];
-        let arrUnique=arr2.reduce((init,curr)=>{
+        let arrUnique=arr2.sort().reduce((init,curr)=>{
             if(init.length===0||init[init.length-1]!==curr){
                 init.push(curr);
             }
@@ -85,6 +94,35 @@
             return ele>1;
         };
         console.log(arr2.find(isPrime));
+        
+        //有以下数组
+        let scoreTable=[
+            {id:00,name:'xiaoxu',score:80},
+            {id:11,name:'xiaozhang',score:80},
+            {id:22,name:'xiaowang',score:95},
+            {id:33,name:'xiaoli',score:50},
+            {id:44,name:'xiaoqian',score:68},
+            {id:55,name:'xiaobian',score:84},
+        ];
+        //1:判断scoreTable是不是数组
+        let isArray=function(arr){
+            // return Array.isArray(arr);
+            // return arr instanceof Array;
+            return Object.prototype.toString.call(arr)==='[object Array]';
+        };
+        console.log(isArray(scoreTable));
+        //2：将第三条替换为{id:33,name:'xiaoli',score:55}
+        scoreTable.splice(2,1,{id:33,name:'xiaoli',score:55});
+        console.log(scoreTable);
+        //3:用你认为最优的方法，快速获取最高的score值
+        let arrScore=[];
+        scoreTable.forEach((value,index,array)=>{
+            arrScore.push(value.score);
+        });
+        console.log(arrScore+'中最大的值为:'+Math.max.apply(null,arrScore));
+        //4:判断包含不及格的学生
+        let scoreLessSixty=scoreTable.filter((value,index,array)=>value.score<60);
+        console.log(scoreLessSixty);
     </script>
 </body>
 </html>
