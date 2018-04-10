@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+ackground: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+
+      let header={  //定义
+        template:'<span>推荐用法</span>'
+      };
+
+      new Vue({
+        el:'#app',
+        components:{ //注册
+          //'组件名':组件变量名/组件本身
+          'hd':header
+        }
+      });
+
+
+
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--使用-->
+  <hd></hd>
+</div>
+
+</body>
+</html>

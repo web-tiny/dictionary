@@ -1,0 +1,21 @@
+module.exports={
+  entry:'./entry.js',//入口文件
+  output:{//输出
+    filename:'boudle.js'
+  },
+  module:{
+    rules:[//配置loader
+      {test:/\.css$/,use:['style-loader','css-loader']},
+      {
+        test:/\.js$/,
+        exclude:/node_modules/, //排除
+        use:[{
+          loader:'babel-loader',
+          options:{
+            presets:['es2015']
+          }
+        }]
+      }
+    ]
+  }
+};

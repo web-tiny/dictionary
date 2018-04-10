@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    .box{
+      width:200px;
+      height:200px;
+      background: red;
+      margin:0 auto;
+      font-size: 50px;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/velocity.min.js"></script>
+  <script>
+    window.onload = function () {
+      new Vue({
+        el:'#app',
+        data:{
+          bl:false
+        },
+        methods:{
+          afterEnter(el){
+            //设置内容el初始css样式状态
+            el.style.opacity=0;
+            el.style.transformOrigin='left top'
+          },
+          enter(el){
+            //Velocity(el,{CSS属性:值},{配置})
+            Velocity(el,{
+              opacity:1
+            },{
+              duration:400
+            });
+            Velocity(el,{
+              opacity:0
+            },{
+              duration:100,
+              loop:3
+            })
+          },
+          leave(el,done){
+            Velocity(el,{
+              rotateZ:'45deg'
+            });
+            Velocity(el,{
+              opacity:0
+            })
+          },
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <input type="button" @click="bl=!bl" value="按钮">
+  <!--使用动画-->
+
+  <transition
+    @before-enter="afterEnter"
+    @enter="enter"
+    @leave="leave"
+  >
+    <div v-if="bl" class="box">box</div>
+  </transition>
+
+</div>
+
+
+</body>
+</html>

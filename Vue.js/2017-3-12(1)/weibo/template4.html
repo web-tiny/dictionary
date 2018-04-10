@@ -1,0 +1,128 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>微博</title>
+<link href="style/weibo.css" rel="stylesheet" type="text/css" />
+  <script src="js/vue.js"></script>
+  <script src="js/vue-resource.js"></script>
+  <script>
+    window.onload=function(){
+      let vm=new Vue({
+        el:'.znsArea',
+        data:{
+          ipt:'',
+          arr:[],
+          count:[],//循环页码
+          now:0 // 当前页（前端)
+        },
+        methods:{
+          send(){
+            //weibo.php?act=add&content=xxx	添加一条
+            let URL='weibo.php';
+            this.$http({
+              url:URL,
+              data:{
+                act:'add',
+                content:this.ipt
+              }
+            }).then((res)=>{
+              //{error:0, id: 新添加内容的ID, time: 添加时间}
+              console.log(res.data);
+              //ajax resource axios is over!!!
+              this.arr.unshift({
+                id:res.data.id,
+                time:res.data.time,
+                content:this.ipt,
+                acc:0,
+                ref:0
+              });
+              if(this.arr.length>6){
+                this.arr.pop()
+              }
+              this.ipt=''
+            },(error)=>{
+              alert('路径有误'+error.status)
+            })
+          },
+          get(n){
+            //weibo.php?act=get&page=1		获取一页数据
+            this.now=n-1;
+            this.$http({
+              url:'weibo.php',
+              data:{
+                act:'get',
+                page:n
+              }
+            }).then((res)=>{
+              //[{id: ID, content: "内容", time: 时间戳, acc: 顶次数, ref: 踩次数}, {...}, ...]
+              this.arr=res.data;
+            })
+          },
+          getPage(){
+            //weibo.php?act=get_page_count	获取页数
+            this.$http({
+              url:'weibo.php',
+              data:{
+                act:'get_page_count'
+              }
+            }).then((res)=>{
+//              alert(res.data);
+              for(var i=0;i<res.data.count;i++){
+                this.count.push(i+1);
+              }
+            })
+          }
+        },
+        filters:{
+          date(input){
+            let d = new Date();
+            d.setTime(input*1000);
+            let fillZero=function(n){return n<10?'0'+n:''+n}
+            return d.getFullYear()+'-'+fillZero(d.getMonth()+1)+'-'+fillZero(d.getDate())+' '+fillZero(d.getHours())+':'+fillZero(d.getMinutes())+':'+fillZero(d.getSeconds());
+          }
+        },
+        created(){
+          this.get(1);
+          this.getPage()
+        }
+      });
+    };
+//    Vue.filter('date',function(input){})
+  </script>
+</head>
+
+<body>
+<div class="znsArea">
+  <!--{{get()}}-->
+<!--留言-->
+     <div class="takeComment">
+        <textarea name="textarea" class="takeTextField" id="tijiaoText" v-model="ipt"></textarea>
+        <div class="takeSbmComment">
+            <input type="button" class="inputs" value="" @click="send"  />
+            <span>(可按 Enter 回复)</span>
+        </div>
+    </div>
+<!--已留-->
+    <div class="commentOn">
+        <div class="noContent" v-if="arr.length==0">暂无留言</div>
+        <div class="messList">
+        	<div class="reply" v-for="item in arr">
+                <p class="replyContent">{{item.content}}</p>
+                <p class="operation">
+                    <span class="replyTime">{{item.time | date}}</span>
+                    <span class="handle">
+                    	<a href="javascript:;" class="top">{{item.acc}}</a>
+                        <a href="javascript:;" class="down_icon">{{item.ref}}</a>
+                        <a href="javascript:;" class="cut">删除</a>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="page">
+        	<a href="javascript:;" :class="{active:index==now}" v-for="(val,index) in count" @click="get(index+1)">{{val}}</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

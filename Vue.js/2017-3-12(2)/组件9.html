@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+
+      let aa={  //定义
+        template:'<div>我是aa组件内容</div>'
+      };
+      const bb={
+        template:'<div>我是bb组件内容</div>'
+      };
+      let cc={
+        template:'<div>我是cc内容</div>'
+      };
+
+      new Vue({
+        el:'#app',
+        components:{ //注册
+          'aa':aa,
+          'bb':bb,
+          'cc':cc
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--使用-->
+  <aa></aa>
+  <bb></bb>
+  <cc></cc>
+</div>
+
+</body>
+</html>

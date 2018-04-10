@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+
+//      alert(Vue);
+      //Vue.directive('指令名',函数)
+      Vue.directive('red',function(){
+        alert('ok');
+      });
+
+      let vm=new Vue({
+        el:'#app',
+        data:{
+
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <div v-red>box</div>
+</div>
+
+
+</body>
+</html>

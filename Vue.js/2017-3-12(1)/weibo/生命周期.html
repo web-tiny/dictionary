@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+      let vm=new Vue({
+        el:'#app',
+        data:{
+          msg:'bmw'
+        },
+        methods:{
+          del(){
+            this.$destroy();
+          }
+        },
+        beforeCreate:function(){
+          alert('vm实例刚刚被创建');
+        },
+        created(){
+          alert('实例创建完毕（有数据，有方法（事件）')
+        },
+        beforeMount(){
+          alert('模板编译之前')
+        },
+        mounted(){
+          alert('模板编译完成')
+        },
+        beforeUpdate(){
+          alert('模板更新之前')
+        },
+        updated:function(){
+          alert('模板更新之后')
+        },
+        beforeDestroy(){
+          alert('vm实例销毁之前')
+        },
+        destroyed(){
+          alert('vm实例销毁之后');
+          alert(vm);
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <input type="text" v-model="msg">
+  <input type="button" @click="del" value="删除vm">
+  {{msg}}
+</div>
+</body>
+</html>

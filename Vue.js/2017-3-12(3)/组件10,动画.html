@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    .box{
+      transition: .4s ease all;
+      position: absolute;
+    }
+    .fade-enter{
+      opacity:0
+    }
+    .fade-leave-active{
+      opacity:0
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+      new Vue({
+        el:'#app',
+        data:{
+          msg:'bb'
+        },
+        components:{
+          aa:{
+            template:'<div>我是aa组件</div>'
+          },
+          bb:{
+            template:'<div>我是bb组件</div>'
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <input type="button" value="aa组件" @click="msg='aa'">
+  <input type="button" value="bb组件" @click="msg='bb'">
+
+  <transition  name="fade">
+    <component :is="msg" class="box"></component>
+  </transition>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+复习昨天:
+	M:   data:number/string/array/json/fn/NaN/undefined....
+	V:	 v-text/v-html/v-bind/:属性="数据名/计算属性"/{{数据名}}/{{计算属性}}
+	VM:	 methods:{方法名:fn}
+------------------------------------
+v-for="(变量名,index/key) in 数据"
+---------------------------------
+事件：<button @事件名="方法名($event)"></button>
+------------------------------------------
+模板表单式：
+	{{数据名 +-*/ 数}}
+	{{数据.split('').reverse().join('')}}
+------------------------------------------------
+computed:{}	：	计算一次，除非数据发送了变化
+	xxx:function(){}  获取 get
+	xxx:{
+		set:fn(val)
+		get:fn
+	}
+------------------------------------------------
+指令：扩展HTML语法
+	绑定事件：v-on:事件名=“方法”	:事件名=“方法”
+------------------------------------------------
+v-show/v-if/v-hide
+------------------------------------------------
+v-bind:class="数据"	数据:json
+v-bind:style="数据"	json/arr
+------------------------------------------------
+自定义指令：
+	Vue.directive('指令名',function(el,binding){
+		el  dom
+		binding.value  传入值
+	})
+
+	还可以定义在选项里面：
+		new Vue({
+			xx:oo
+			directves:{
+				xx:fn
+				oo:fn
+			}
+		})
+钩子：指令有钩子：bind/update/inserted/componentUpdate
+	Vue.directive('指令名',fn)	bind/update
+在Vue：使用jq
+
+事件：
+	冒泡：ev.cancelBubble=true/ev.stopPropagation
+		  @click.stop=fn
+	默认: return false / @contextmenu.prevent=fn
+
+键盘：@keydown/keyup/.....
+	  @keydown.13/48/enter
+
+过滤器：
+	a):	Vue.filter('过滤器名',function(数据,arg1,arg2){})
+	b):	选项：filters
+
+-------------------------------------------------------
+
+
+数据交互：
+	vue-resource
+	用法：this.$http.get(url).then(succssFn,errorFn)
+		successFn(res):	res返回对象	res.data 数据
+		errorFn(error):	error.status 状态码
+	读（静态）文件：
+		回来的数据类型：字符
+	读php
+		get:	this.$http.get(url).then(succssFn,errorFn)
+		post:this.$http.get(url,{参数},{
+			emulateJSON:true  请求头
+		}).then(succssFn,errorFn)
+	配置写法:
+		this.$http({	
+			url:	'xxx.php',
+			data:{
+				a:1,
+				b:2
+			}
+		})
+
+	jsonp: 
+		
+		this.$http.jsonp(url,{数据参数},{配置}).then(succssFn, errorFn)
+	
+	高低版本变化：
+		jsonp(url,{数据参数},{配置})
+
+		jsonp(url,{
+			params/data:{xx:oo},
+			配置1:值,
+			xx:oo
+		})
+
+	https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=aa&cb=show
+
+	数据监测：
+	选项：watch:{
+		数据名:fn   一旦数据发生变化，函数就会调用
+	}
+------------------------------------------------
+axios:
+	引入： 有axios函数  == ajax函数
+	Vue.prototype.$http=axios
+	同上
+------------------------------------------------
+VM生命周期：
+	new Vue->	beforeCreate/created->
+	beforeMount/mounted->
+
+需要触发
+	beforeUpdate:模板更新之前	
+	updated:模板更新之后
+	beforeDestroy:vm实例销毁之前
+	destroyed:vm实例销毁之后
+		this.$destroy()	手工销毁vm
+------------------------------------------------

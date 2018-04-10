@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+    .odd{background:red;}
+    .even{background:green;}
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+      let vm=new Vue({
+        el:'#app',
+        data:{
+          arr:['西游记','三国演义','红楼梦','金瓶梅']
+          //json:{red:true,wh:true}
+        },
+        methods:{
+          changeColor:function(index){
+            /*
+             this.arr.forEach((val,index)=>{
+             //              alert(val);
+             if(index%2==0){
+             return {odd:true,even:false}
+             }else{
+             return {odd:false,even:true}
+             }
+             })*/
+
+            if(index%2==0){
+              return {odd:true,even:false}
+            }else{
+              return {odd:false,even:true}
+            }
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <div v-for="(val,index) in arr" :class="changeColor(index)">{{val}}</div>
+
+</div>
+
+
+</body>
+</html>

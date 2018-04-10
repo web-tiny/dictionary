@@ -1,0 +1,107 @@
+﻿复习：
+	组件
+
+	使用：<v-组件名>
+	定义：
+		a)	Vue.extend({组件})
+		b)	let 组件变量名={}	√
+	注册：
+		选项：components:{'v-组件名':组件变量}	√
+		Vue.component('v-组件名',组件变量)
+------------------------------------------------------------
+组件嵌套：
+	使用：
+		template id="父"
+			父内容
+			<子></子>
+			父内容
+	定义：
+		components:{
+			父:{
+				xx:oo,
+				components:{
+					子:{
+						xx:oo
+					}
+				}
+			}
+		}
+------------------------------------------------------------
+组件通讯
+	父给子
+		父使用子组件时，传递
+		<child :自定义属性="父数据"></child>
+		子组件：
+			选项: props:['自定义属性']
+		子模板：
+			{{自定义属性}}
+	子给父
+		<child @自定义事件="父方法"></child>
+		子组件：子传递数据	this.$emit('自定义事件',子数据)
+		父组件：父方法(data)	data就是子传递过来的数据
+	非父子
+		原理：定义一个空的vue实例 evt=new Vue(),自个发，自个收
+		自个发：evt.$emit('自定事件名',数据)
+		自个收: evt.$on('自定事件名',(data)=>{})
+			data 收到的数据
+	打通父子之间所有数据和方法的共享
+		父模板：<child ref="子名称"></child>
+		父访问子:	父组件: this.$refs.子名称.子数据/方法名()
+		子访问父:	子组件: this.$parent.子数据/方法名()
+	动态组件：
+		<component :is="组件名"></component>
+----------------------------------------
+slot 内容分发
+	<aaa>
+		<h3 slot="s1">
+    		<p slot="s2">
+	</aaa>
+
+	template:
+		<slot name="s1"></slot>		-->	 h3
+		<slot name="s2"></slot>		-->	 p
+		<slot>默认空槽内容</slot>
+----------------------------------------
+Vue是利用css3动画（效率）
+	
+	使用动画：
+		属性：<transition name="动画名">要动的东西</transition>
+			transition 动的是里面第0个元素
+			transition-group :key=1
+		其他属性：enter-active-class	leave-active-class
+		事件：
+			before-enter
+			after-enter
+			before-leave
+			after-leave
+			enter  进入（入场)
+			leave  离开（离场）
+	定义动画：
+		.动画名-enter{打哪来}
+		.动画名-leave-active{到哪去}
+		.动画名-enter-active{来了后停哪}
+
+	css3动画:
+		transition:	过渡	注意： +	transition: 过渡效果
+		animation:	动画
+			@keyframes 动画名
+			.动画名-leave-active{animation:时间 动画名}
+			...
+	其他css3动画库
+		推荐: animate.css
+		<transition
+			enter-active-class="css类名"  不要有多余空格
+			leave-active-class="css类名"
+		>要动的东西</transition>
+	js动画库：	Velocity.js
+		Velocity(el,{CSS属性:值},{配置})
+		链式动画:	Veloctiy()  -> Veloctiy() 
+		配置:
+			duration: 时间(毫秒)
+			progress: fn 动画还在做，progress一直执行
+			display: 'none/block'	动画结束后是否可见
+			loop: true/false/number
+			complete: fn	动画完成
+			delay: 时间
+------------------------------------------------------------
+

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <template id="parent">
+    <div class="parent">
+      我是父组件：{{msg}}/{{msg2}}
+      <hr>
+      <child :m="msg" :m2="msg2"></child>
+    </div>
+  </template>
+  <template id="child">
+    <div>
+      我是子组件:{{msg}},我接受:{{m}}/{{m2}}
+    </div>
+  </template>
+  <script>
+    const child={
+      template:'#child',
+      data(){
+        return {
+          msg:'子数据'
+        }
+      },
+      props:['m','m2']
+    };
+    const parent={
+      template:'#parent',
+      data(){
+        return {
+          msg:'父数据1',
+          msg2:'父数据2'
+        }
+      },
+      components:{
+        child
+      }
+    };
+
+  </script>
+
+  <script>
+    window.onload = function () {
+      new Vue({
+        el:'#app',
+        components:{
+          parent
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <parent></parent>
+</div>
+
+
+</body>
+</html>

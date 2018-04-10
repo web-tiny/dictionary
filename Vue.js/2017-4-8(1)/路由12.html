@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/vue-router.js"></script>
+  <template id="user">
+    <div>
+      <div>我是用户页面</div>
+      <hr>
+      <router-link :to="{name:'login'}">登录</router-link>
+      <router-link to="/user/reg">注册</router-link>
+      <router-view>登录/注册展示区</router-view>
+    </div>
+  </template>
+  <template id="news">
+    <div>
+      <div>
+        <input type="button" value="←" @click="back">
+        我是新闻页
+        <input type="button" value="右" @click="qianjin">
+      </div>
+      <hr>
+      <li v-for="val in arr">
+        <router-link  :to="{name:'detail',params:{aid:val}}">新闻{{val}}</router-link>
+      </li>
+
+      <router-view></router-view>
+    </div>
+  </template>
+  <template id="detail">
+    <div>
+      <div>我是详情页面</div>
+      <!--参数-->
+      {{$route.params}}
+      <br>
+      {{$route.path}}
+      <br>
+      {{$route.query}}
+      <br>
+      <input type="button" value="返回" @click="back">
+    </div>
+  </template>
+  <template id="home">
+    <div>
+      我是首页
+      <br>
+      <input type="button" value="去用户页" @click="push">
+      <input type="button" value="去详情页" @click="replace">
+
+    </div>
+  </template>
+  <script>
+    window.onload = function () {
+      //准备路由要使用的组件
+      const home={
+        template:'#home',
+        methods:{
+          push(){
+            //console.log(router);
+            router.push({path:'/user'});
+          },
+          replace(){
+            //alert(router);
+            router.replace({path:'/news/detail/003'});
+          }
+        }
+      };
+      const news={
+        template:'#news',
+        data(){
+          return {
+            arr:['001','002','003']
+          }
+        },
+        methods:{
+          back(){
+            router.go(-1);
+          },
+          qianjin(){
+            router.go(1);
+          }
+        }
+      };
+      const user={
+        template:'#user'
+      };
+      const login={
+        template:'<div>我是login页面</div>'
+      };
+      const reg={
+        template:'<div>我是reg页面</div>'
+      };
+      const detail={
+        template:'#detail',
+        methods:{
+          back(){
+            router.go(-1);
+          }
+        }
+      };
+      //配置
+      const routes=[
+        {
+          path:'/home',
+          components:{
+            default:home,
+            newview:news,
+            loginview:login
+          }
+        },
+        {
+          path:'/news',
+          component:news,
+          children:[
+            {name:'detail',path:'detail/:aid',component:detail}
+          ]
+        },
+        {
+          name:'user',
+          path:'/user',
+          component:user,
+          children:[
+            {name:'login',path:'login',component:login},
+            {path:'reg',component:reg},
+          ]
+        },
+        {path:'/',redirect:'/home'}
+      ];
+
+      //定义
+      const router=new VueRouter({routes});
+
+      new Vue({
+        el:'#app',
+//        'router':router
+        router
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--调用-->
+  <router-link to="/home">主页</router-link>
+  <router-link to="/news">新闻</router-link>
+  <router-link to="/user">用户</router-link>
+  <router-view>默认内容展示区</router-view>
+  <router-view name="newview">newview内容展示区</router-view>
+  <router-view name="loginview"></router-view>
+</div>
+
+</body>
+</html>

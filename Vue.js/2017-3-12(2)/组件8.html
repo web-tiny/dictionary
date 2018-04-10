@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+
+      let header={  //定义
+        template:'<div>我是header组件内容</div>'
+      };
+      const Footer={
+        template:'<div>我是footer组件内容</div>'
+      };
+      let des={
+        template:'<div>我是content内容</div>'
+      };
+
+      new Vue({
+        el:'#app',
+        components:{ //注册
+          //'组件名':组件变量名/组件本身
+          'hd':header,
+          'ft':Footer,
+//          'des':des
+          des
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--使用-->
+  <hd></hd>
+  <hr>
+  <des></des>
+  <hr>
+  <ft></ft>
+</div>
+
+</body>
+</html>

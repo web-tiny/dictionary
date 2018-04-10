@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+  </style>
+  <style>
+    .box{background:red;width:100px;height:100px;position: absolute;left:0;top:0;}
+  </style>
+  <script src="js/vue.js"></script>
+
+  <template id="buycar">
+    <div>
+      <dl v-for="item in arr">
+        <dt>商品名称: {{item.name}}</dt>
+        <dd>单价: {{item.price  | currency(4,'RMB')}}</dd>
+        <dd>数量: <input type="number" v-model="item.count"></dd>
+        <dd>小计: {{item.price * item.count | currency}}</dd>
+      </dl>
+      总价: {{sum | currency(3,'$')}}
+    </div>
+  </template>
+  <template id="drag">
+    <div class="box" v-drag>23423234</div>
+  </template>
+
+  <script>
+    const buycar={
+      template:'#buycar',
+      data(){
+        return {
+          ipt:1,
+          arr:[
+            {name:'西红柿',price:1.2,count:2},
+            {name:'鸡蛋',price:3.9,count:2.5}
+          ]
+        }
+      },
+      computed:{
+        sum:function(){
+          let result=0;
+          this.arr.forEach((item,index)=>{
+            result += item.price * item.count;
+          });
+          return result;
+        }
+      },
+      filters:{
+        'currency':function(input,digit=2,currency='￥'){
+          return currency+input.toFixed(digit);
+        }
+      }
+    };
+    const drag={
+      template:'#drag',
+      directives:{
+        drag(el,binding){
+          el.onmousedown=function(ev){
+            let disX=ev.clientX-el.offsetLeft;
+            let disY=ev.clientY-el.offsetTop;
+            document.onmousemove=function(ev){
+              el.style.left=ev.clientX-disX+'px';
+              el.style.top=ev.clientY-disY+'px';
+            };
+            document.onmouseup=function(){
+              document.onmousemove=null;
+              document.onmouseup=null;
+            };
+            return false;
+          };
+        }
+      }
+    };
+  </script>
+
+  <script>
+    window.onload = function () {
+      new Vue({
+        el:'#app',
+        components:{
+          buycar,
+          drag
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <drag></drag>
+  <buycar></buycar>
+</div>
+
+
+</body>
+</html>

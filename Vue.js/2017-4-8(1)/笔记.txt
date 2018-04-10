@@ -1,0 +1,171 @@
+﻿路由：
+干嘛的：做SPA(单页面应用)
+	特点：速度快,数据ajax请求，通过路由页面不会重载
+	要求：引入	vue-router.js
+	router 路由实例   routes 配置   route  具体页面有关路由叫法
+
+流程：
+	调用：
+		<router-link to="/路由名字或路径">主页</router-link>
+		<router-view>内容展示区</router-view>
+	定义
+		const router=new VueRouter({
+	        routes:[路由配置]
+	    });
+	注册
+		new Vue({
+			xx:oo
+			...
+			'router':router
+			router 简写
+		})
+	路由配置：
+		[
+			{path:'/...',component:组件名1},
+			{path:'/...',component:组件名2},
+
+		]
+
+	路由嵌套：
+		[
+			{path:'/...',component:组件名},
+			{
+				path:'/...',
+				component:组件名
+				children:[
+					{},
+					{}
+				]
+			},
+
+		]
+	路由传参：
+		to = "/news/detail/001"
+		{path:'detail/:aid',com...}
+
+		{{$route.params}}	参数
+		{{$route.path}}		路径
+		{{$route.query}}	数据
+	添加一个路由：
+		router.push({path:'...'})	历史记录会添加
+		router.replace({})	不会添加
+	路由命名:
+		{path:...,component:..,name:'路由名'}
+		:to = "{name:路由名,params:{aid:xx,uid:oo}}"
+	路由多视图（router-view）展示
+		<router-view name="视图名"> 
+		...
+
+		{path:...,components:{default:组件1,视图名:组件}}
+
+-------------------------------------------------------------------
+单文件组件:template+script+style  == 文件名.vue
+
+搭环境：vue-cli	-> 项目环境（可以使用xx.vue)
+
+需要对.vue 转换、打包	--> webpack
+------------------------------------------------
+webpack
+	干嘛的：模块加载器（commonJs,es6）,打包工具
+	前身：browserify	js
+要求：node -> npm -> 使用webpack
+
+安装流程：
+	1.npm install webpack -g  安装webpack 全局命令环境（装软件）
+	检测安装是否成功: webpack --version
+	2. npm init -y 创建package.json
+		你的文件给了同事：	npm install
+	3. npm install webpack -D 		本地
+			instal == i  -D == --save-dev
+------------------------------------------------------------
+打包:
+	webpack A B		a 打包成b
+
+------------------------------------------------------------
+webpack默认只能打包js,需要打包其他(css/sass/...)需要loader
+
+loader: 转换器（把css 转换模块化 ）
+	打包：css 
+		style-loader  插入css代码到页面
+		css-loader	转换css代码模块化
+	需要安装：
+		npm install style-loader css-loader -D
+
+希望：webpack 打包
+	配置webpack.config.js
+
+	webpack 开发环境	不带压缩
+	webpack -p 生产环境 压缩
+	webpack -w 监听文件变动，自动打包，不会刷新浏览器
+
+-------------------------------------------------
+ES6-->ES5  用到babel
+	安装：npm install babel-loader babel-core babel-preset-es2015 -D
+	let -> var
+
+	需要配置webpack.config.js
+
+-------------------------------------------------
+需要热加载：
+	安装：webpack-dev-server
+	npm install webpack-dev-server -g  装到全局
+
+	运行一个webpack的服务（热加载），自动打包，监听，自动刷新
+
+	webpack-dev-server --inline --hot --open --port 8007
+		open 打开浏览器
+		port 端口 默认：8080
+
+	[HMR]	hot module reload
+	[WDS]	webpack dev server
+-------------------------------------------------
+单文件组件：
+	一个文件(template+script+style)  == xx.vue
+脚手架：为了搭建项目环境
+	安装：npm install vue-cli
+	创建：项目目录
+		vue init 项目模板 本地目录名
+		项目模板: webpack 大项目
+				  webpack-simple 建议模板 (不支持图片打包)
+	进入项目目录：	cd 本地目录名
+	安装依赖：	npm install
+	运行项目： npm run dev
+	打包：npm run build
+-------------------------------------------------
+脚手架+路由+动画
+安装路由：npm instal vue-router -D
+1.引入:	import VueRouter from 'vue-router'
+2.注册:	Vue.use(VueRouter)
+3.配置: const routes=[]
+4.创建：const router=new VueRouter({routes})
+5.挂载: new Vue({xx:oo,router})
+
+动画：
+安装：animate.css  npm install animate.css -D
+ 截止2017-3-10，vue脚手架 导入animate.css是，缺少 style-loader(下载)
+ 需要配置：webpack.config.js  里面module css-loader....
+
+-------------------------------------------------
+VUEX
+	干嘛的：状态管理（集中式数据管理）
+	什么时候用：开发大中行单页
+安装：
+	vue init webpack-simple demo  创建vue项目环境
+	npm install vuex -D
+
+	store.js (状态管理) 
+思路：store
+	state 数据状态
+	actions 处理、管理事件
+	mutations 修改状态
+	getters	获取状态
+		都是一个json
+状态管理脑图:
+	component->actions->mutations->state->getters->component
+	
+	component-->mapActions->actions-->commit->mutations->state->mapGetters-->getters->component
+
+
+
+
+

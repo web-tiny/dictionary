@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    .box{
+      background:red;
+      width:100px;
+      height:100px;
+      margin:0 auto;
+    }
+  </style>
+  <link rel="stylesheet" href="css/animate.css">
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+      new Vue({
+        el:'#app',
+        data:{
+          bl:false
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+
+  <input type="button" @click="bl=!bl" value="按钮">
+
+  <!--使用动画-->
+  <transition
+    enter-active-class="animated wobble infinite"
+    leave-active-class="animated flipOutY infinite"
+  >
+    <div v-if="bl" class="box"></div>
+  </transition>
+
+</div>
+
+
+</body>
+</html>

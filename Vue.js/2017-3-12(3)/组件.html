@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <template id="header">
+    <div>
+      <div>我是header组件的LOGO</div>
+      <!--调用-->
+      <v-nav></v-nav>
+      <div>我是header组件</div>
+    </div>
+  </template>
+  <template id="nav">
+    <div>我是nav组件</div>
+  </template>
+  <script>
+    //定义
+    const nav={
+      template:'#nav'
+    };
+
+    const header={
+      template:'#header',
+      components:{
+        'v-nav':nav
+      }
+    };
+
+  </script>
+  <script>
+    window.onload = function () {
+      new Vue({
+        el:'#app',
+        components:{
+          'v-header':header
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <v-header></v-header>
+</div>
+
+
+</body>
+</html>

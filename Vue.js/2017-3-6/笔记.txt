@@ -1,0 +1,97 @@
+杨智
+3503716 晚九	九叔	九哥
+------------------------------------------
+VUE:
+	学习思路：
+		面向过程：事件驱动
+		面向对象：OOP
+		面向数据：VUE一切都是数据
+干嘛的：
+	是个框架
+
+angular:
+	ng-xx
+	数据、方法都在$scope上	要有控制器
+	上手难
+	PC
+vue:
+	v-xx
+	没有控制器
+	就new Vue对象   ， 传了一坨json, 控制一片html代码
+	上手容易
+	移动端
+共同点：不兼容（低版IE）
+------------------------------------------
+
+M:	数据 	data:...
+V:	展示	{{数据名}}...
+VM:	Vue实例
+
+M<->VM<->V
+
+data:	number/string/array/json/function....NaN,undefind..
+V:	{{数据名/计算属性}}	
+	v-text="数据名" 
+	v-html="数据名" 
+	v-bind:htm属性="数据名"
+	:htm属性="数据名"
+----------------------------------------
+循环：
+	v-for="变量名 in arr"  变量名 = 数组值
+	(val ,index ) in arr val=值/index=索引
+	(val,key) in json	key 建
+----------------------------------------
+方法:	methods:{方法名:fn}
+事件：	v-on:事件名="方法名"	@事件名="方法名($event)"
+		方法名:fn(ev)	ev.srcElement.xxx
+----------------------------------------
+留言板:todolist
+----------------------------------------
+方法（methods）和计算属性(computed)区别
+	1. 	方法需要调用,计算属性不需要
+	2.	计算属性(函数)只有在数据变化时才调用,高效
+------------------------------------
+计算属性：
+	默认：可读，如果要写入加一个set
+	computed:{
+		属性名:fn  可读
+	}
+	computed:{
+		属性名:{
+			get:fn  可读,
+			set:fn(val)  可写
+		}
+	}
+------------------------------------
+指令：
+	v-text/v-html/v-model/v-bind/v-for/v-on/
+	v-show="数据(true/false)"	操作样式	√
+	v-if="true/false"	操作dom
+------------------------------------
+class操作：
+	:class="{css属性名:true,xx:oo}"	
+	:class="数据名"		data:{数据名:值}
+-------------------------------------
+style操作:
+	:style="{css属性名:true,xx:oo}"	
+	:style="数据名/arr/json"		data:{数据名:值}
+-------------------------------------
+v-model:	实现数据双向绑定
+	咋用：用在能生产数据的表单元素里面
+	text:  输入的数据
+	button: value
+	checkbox: true/false
+	select:	option的value
+	radio：	value
+-------------------------------------
+自定义指令：
+	Vue.directive('指令名',函数)	指令不带v-
+	选项：directives:{指令名:函数(el,binding)}
+	el:	dom
+	binding.value 传入的值
+
+	Vuel.directive('指令名',{
+		xx:fn
+		bind:function(){}//只调用一次指令
+		inserted:function() //el被插入到父级容器里面时
+	})

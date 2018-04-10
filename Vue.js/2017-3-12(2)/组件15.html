@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+
+  <style>
+  </style>
+
+  <script src="js/vue.js"></script>
+
+  <template id="buycar">
+    <div>
+      <dl v-for="item in arr">
+        <dt>商品名称: {{item.name}}</dt>
+        <dd>单价: {{item.price  | currency(4,'RMB')}}</dd>
+        <dd>数量: <input type="number" v-model="item.count"></dd>
+        <dd>小计: {{item.price * item.count | currency}}</dd>
+      </dl>
+      <hr>
+      总价: {{sum | currency(3,'$')}}
+    </div>
+  </template>
+  <script>
+    window.onload = function () {
+      Vue.filter('currency',function(input,digit=2,currency='￥'){
+        //alert(input);
+        return currency+input.toFixed(digit);
+//    return 'bmw';
+      });
+
+      const buycar={
+        template:'#buycar',
+        data(){
+          return {
+            ipt:1,
+            arr:[
+              {name:'西红柿',price:1.2,count:2},
+              {name:'鸡蛋',price:3.9,count:2.5},
+              {name:'茄子',price:2.7,count:4.5},
+              {name:'黄瓜',price:7.8,count:5}
+            ]
+          }
+        },
+        computed:{
+          sum:function(){
+            let result=0;
+            this.arr.forEach((item,index)=>{
+              result += item.price * item.count;
+            });
+            return result;
+          }
+        }
+      };
+
+      new Vue({
+        el:'#app',
+        components:{
+          buycar
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <hr>
+  <buycar></buycar>
+  <hr>
+  <buycar></buycar>
+</div>
+
+</body>
+</html>

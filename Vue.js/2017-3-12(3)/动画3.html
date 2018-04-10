@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    .box{
+      background:red;
+      width:100px;
+      height:100px;
+      transition: .4s all ease;
+      margin:0 auto;
+    }
+    .fade-enter{
+      /*打哪来*/
+      opacity:0;
+      transform:translateX(-100px);
+    }
+    .fade-leave-active{
+      /*到哪去*/
+      opacity:0;
+      transform:translateX(100px);
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+
+      new Vue({
+        el:'#app',
+        data:{
+          bl:false
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+
+  <input type="button" @click="bl=!bl" value="按钮">
+
+  <!--使用动画-->
+  <transition name="fade">
+    <div v-if="bl" class="box"></div>
+  </transition>
+
+</div>
+
+
+</body>
+</html>

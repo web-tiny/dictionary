@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload=function(){
+      let vm=new Vue({
+        el:'#app',
+        data:{  //M
+          msg:'bmw',
+          msg2:12,
+          msg3:['apple','banana','orange','pear'],
+          msg4:{a:1,b:2,c:3},
+          msg5:true,
+          msg6:function(){
+            alert('ok');
+            return 'qq'
+          }
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--V-->
+  {{msg}}
+  <hr>
+  {{msg2}}
+  <hr>
+  {{msg3}}
+  <hr>
+  {{msg4}}
+  <hr>
+  {{msg5}}
+  <hr>
+  {{msg6()}}
+</div>
+
+
+</body>
+</html>

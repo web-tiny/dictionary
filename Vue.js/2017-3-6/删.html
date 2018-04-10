@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload=function(){
+      let vm=new Vue({
+        el:'#app',
+        data:{
+          arr:['apple','orange'],
+        },
+        methods:{
+          add:function(){
+            this.arr.push('banana'); //增
+          },
+          delAll:function(){
+            this.arr=[];
+          }
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+
+<div id="app">
+
+  <input type="button" value="添加" @click="add">
+  <input type="button" value="删除所有" @click="delAll">
+  <li v-for="val in arr">{{val}}</li>
+
+</div>
+
+
+</body>
+</html>

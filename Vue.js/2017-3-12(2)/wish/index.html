@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>666</title>
+<link rel="stylesheet" href="./Css/index.css" />
+  <script src="js/vue.js"></script>
+  <script src="js/vue-resource.js"></script>
+  <style>
+    [v-cloak]{display:none}
+  </style>
+  <script>
+    window.onload=function(){
+      Vue.directive('wish',function(el,binding){
+        let dt=el.children[0];
+        dt.onmousedown=function(ev){
+          let disX=ev.clientX-el.offsetLeft;
+          let disY=ev.clientY-el.offsetTop;
+          document.onmousemove=function(ev){
+            let l=ev.clientX-disX;//计算
+            let t=ev.clientY-disY;
+            if(l<0)l=0;
+            if(t<0)t=0;
+            if(l>document.documentElement.clientWidth-el.offsetWidth)
+              l=document.documentElement.clientWidth-el.offsetWidth;
+            if(t>document.documentElement.clientHeight-el.offsetHeight-128)
+              t=document.documentElement.clientHeight-el.offsetHeight-128;
+            el.style.left=l+'px';//使用
+            el.style.top=t+'px';
+          };
+          document.onmouseup=function(){
+            document.onmousemove=document.onmouseup=null;
+          };
+          return false;
+        };
+      });
+      Vue.directive('pos',function(el){
+        let rnd=function(n,m){return parseInt(n+Math.random()*(m-n))};
+        el.style.left=rnd(0,document.documentElement.clientWidth-el.offsetWidth)+'px';
+        el.style.top=rnd(0,document.documentElement.clientHeight-el.offsetHeight-128)+'px';
+
+      });
+      let vm=new Vue({
+        el:'#wish',
+        data:{
+          sendFrame:'none',
+          username:'',
+          content:'',
+          arr:[]
+        },
+        methods:{
+          send(){
+            this.sendFrame='none';
+            //wish.php?act=add&username=xxx&content=xxx
+            this.$http({
+              url:'wish.php',
+              data:{
+                act:'add',
+                username:this.username,
+                content:this.content
+              }
+            }).then((res)=>{
+              //{error:1, msg:xxx, id: 心愿ID, time: 1435567718}
+              let json=eval('('+res.data+')');
+              if(json.error==0){
+                this.arr.push({
+                  content:this.content,
+                  username:this.username,
+                  id:json.id,
+                  time:json.time,
+                });
+                this.username=this.content='';
+              }else{
+                alert(json.msg);
+              }
+            })
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+<div id="wish">
+  <div id="top">
+    <span id="send" @click="sendFrame='block'"></span>
+  </div>
+  <div id="main">
+    <dl class="paper a2" v-for="(item,index) in arr" :key="index" v-cloak v-wish v-pos>
+      <dt>
+        <span class="username">{{item.username}}</span>
+        <span class="num">{{item.id}}</span>
+      </dt>
+      <dd class="content">{{item.content}}</dd>
+      <dd class="bottom">
+        <span class="time">{{item.time}}</span>
+        <a href="javascript:;" class="close"></a>
+      </dd>
+    </dl>
+
+  </div>
+
+  <div id="send-form" :style="{display:sendFrame}">
+    <p class="title"><span>许下你的愿望</span><a href="javascript:;" id="close" @click="sendFrame='none'"></a></p>
+    <form action="" name="wish">
+      <p>
+        <label for="username">昵称：</label>
+        <input type="text" name="username" id="username" v-model="username"/>
+      </p>
+      <p>
+        <label for="content">愿望：(您还可以输入&nbsp;<span id="font-num">50</span>&nbsp;个字)</label>
+        <textarea name="content" id="content" v-model="content"></textarea>
+      <div id="phiz">
+        <img src="./Images/phiz/zhuakuang.gif" alt="抓狂" />
+        <img src="./Images/phiz/baobao.gif" alt="抱抱" />
+        <img src="./Images/phiz/haixiu.gif" alt="害羞" />
+        <img src="./Images/phiz/ku.gif" alt="酷" />
+        <img src="./Images/phiz/xixi.gif" alt="嘻嘻" />
+        <img src="./Images/phiz/taikaixin.gif" alt="太开心" />
+        <img src="./Images/phiz/touxiao.gif" alt="偷笑" />
+        <img src="./Images/phiz/qian.gif" alt="钱" />
+        <img src="./Images/phiz/huaxin.gif" alt="花心" />
+        <img src="./Images/phiz/jiyan.gif" alt="挤眼" />
+      </div>
+      </p>
+      <span id="send-btn"  @click="send"></span>
+    </form>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/vue-resource.js"></script>
+  <script>
+    window.onload = function () {
+      let vm=new Vue({
+        el:'#baidu',
+        data:{
+          ipt:'',
+          arr:[]
+        },
+        watch:{
+          //数据名:fn
+          ipt:function(){
+            this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+              wd:this.ipt
+            },{
+              jsonp:'cb'
+            }).then((res)=>{
+//              alert(res.data.s);
+              this.arr=res.data.s;
+            },(error)=>{});
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="baidu">
+  <input type="text" v-model="ipt">
+  <div v-show="arr.length==0">暂无数据</div>
+  <ul>
+    <li v-for="val in arr">{{val}}</li>
+  </ul>
+</div>
+
+</body>
+</html>

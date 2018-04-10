@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    .box{background:red;width:100px;height:100px;position: absolute;left:0;top:0;}
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/jquery-1.10.1.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <div class="box" v-drag>23423234</div>
+</div>
+
+<script>
+  Vue.directive('drag',function(el,binding){
+    $(el).mousedown(function(ev){
+      let disX=ev.clientX-$(this).position().left;
+      let disY=ev.clientY-$(this).position().top;
+      $(document).mousemove(function(ev){
+        $(el).css({
+          left:ev.clientX-disX+'px',
+          top:ev.clientY-disY+'px'
+        });
+      });
+      $(document).mouseup(function(){
+        $(document).unbind('mousemove mouseup');
+      });
+//      return false;
+      //ev.stopPropagation(); //阻止冒泡
+      ev.preventDefault();
+    });
+  });
+  let vm=new Vue({
+    el:'#app',
+    data:{}
+  });
+</script>
+
+</body>
+</html>

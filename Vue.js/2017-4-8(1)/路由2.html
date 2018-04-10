@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/vue-router.js"></script>
+  <script>
+    window.onload = function () {
+      //定义
+      const router=new VueRouter({
+        routes:[路由配置]
+      });
+
+      new Vue({
+        el:'#app',
+//        'router':router
+        router
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--调用-->
+  <router-link to="/home">主页</router-link>
+  <router-link to="/news">新闻</router-link>
+  <router-view>内容展示区</router-view>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload = function () {
+      let vm=new Vue({
+        el:'#app',
+        data:{
+          ipt:'',
+          arr:['apple','banana']
+        },
+        methods:{
+          send:function(){
+//            alert(this.ipt);
+            this.arr.push(this.ipt);
+            this.ipt='';
+          },
+          del:function(index){
+            this.arr.splice(index,1);
+          },
+          add(ev){
+            this.send();
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--<input type="text" v-model="ipt" @keyup.13="add">-->
+  <!--<input type="text" v-model="ipt" @keyup.enter="add">-->
+  <input type="text" v-model="ipt" @keyup.left="add">
+  <input type="button" value="发言" @click="send">
+  <ul>
+    <li v-for="(val,index) in arr">
+      {{val}}
+      <a href="javascript:;" @click="del(index)">删除</a>
+    </li>
+  </ul>
+</div>
+
+</body>
+</html>

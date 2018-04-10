@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script>
+    window.onload=function(){
+      let vm=new Vue({
+        el:'#app',
+        data:{  //M
+          arr:[
+            {
+              title:'111十二届全国人大五次  2017年两会',
+              href:'#',
+              content:[
+                {des:'习近平重托下的上海“精气神”',href:'#'},
+                {des:'牵挂的事 ”',href:'#'},
+                {des:'漫评“精气神”',href:'#'},
+                {des:'治国“精气神”',href:'#'},
+              ]
+            },
+            {
+              title:'22十二届全国人大五次  2017年两会',
+              href:'#',
+              content:[
+                {des:'习近平重托下的上海“精气神”',href:'#'},
+                {des:'牵挂的事 ”',href:'#'},
+                {des:'漫评“精气神”',href:'#'},
+                {des:'治国“精气神”',href:'#'},
+              ]
+            },
+            {
+              title:'33十二届全国人大五次  2017年两会',
+              href:'#',
+              content:[
+                {des:'习近平重托下的上海“精气神”',href:'#'},
+                {des:'牵挂的事 ”',href:'#'},
+                {des:'漫评“精气神”',href:'#'},
+                {des:'治国“精气神”',href:'#'},
+              ]
+            }
+          ]
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+
+<div id="app">
+  <!--V-->
+
+  <ul>
+    <li v-for="item in arr">
+      <a :href="item.href">{{item.title}}</a>
+      <ul>
+        <li v-for="item in item.content"><a :href="item.href">{{item.des}}</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
+
+
+</body>
+</html>

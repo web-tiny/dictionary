@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    body,html{overflow: hidden;height:100%;}
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+    .box{
+      background:#ccc;
+      border-bottom: dashed 1px #000;
+      height:30px;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/vue-resource.js"></script>
+  <script src="js/velocity.min.js"></script>
+  <script>
+    window.onload = function () {
+      let vm=new Vue({
+        el:'#baidu',
+        data:{
+          ipt:'',
+          arr:[]
+        },
+        methods:{
+          get(){
+            this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+              wd:this.ipt
+            },{
+              jsonp:'cb'
+            }).then((res)=>{
+//              alert(res.data.s);
+              this.arr=res.data.s;
+            },(error)=>{});
+          },
+          beforeEnter(el){
+            el.style.height='0px';
+            el.style.opacity=0;
+          },
+          enter(el){
+//            console.log('enter'); 10
+            Velocity(el,{
+              height:'30px',
+              opacity:1
+            },{
+              delay:el.dataset.index * 500
+            })
+          },
+          leave(el,done){
+            Velocity(el,{
+              height:'0px',
+              opacity:0
+            },{
+              delay:el.dataset.index * 500
+            })
+          },
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="baidu">
+  <input type="text" v-model="ipt" @keyup="get">
+  <div v-show="arr.length==0">暂无数据</div>
+  <ul>
+    <transition-group
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @leave="leave"
+    >
+      <li class="box" v-for="(val,index) in arr" :key="index" data-index="index">{{val}}</li>
+    </transition-group>
+  </ul>
+</div>
+
+</body>
+</html>

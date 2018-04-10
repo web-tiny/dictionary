@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    .box{background:red;width:100px;height:100px;position: absolute;left:0;top:0;}
+  </style>
+  <script src="js/vue.js"></script>
+
+</head>
+<body>
+
+<div id="app">
+  <drag></drag>
+</div>
+<template id="drag">
+  <div class="box" v-drag>23423234</div>
+</template>
+<script>
+  const drag={
+    template:'#drag',
+    directives:{
+      drag(el,binding){
+        el.onmousedown=function(ev){
+          let disX=ev.clientX-el.offsetLeft;
+          let disY=ev.clientY-el.offsetTop;
+          document.onmousemove=function(ev){
+            el.style.left=ev.clientX-disX+'px';
+            el.style.top=ev.clientY-disY+'px';
+          };
+          document.onmouseup=function(){
+            document.onmousemove=null;
+            document.onmouseup=null;
+          };
+          return false;
+        };
+      }
+    }
+  };
+</script>
+<script>
+
+  let vm=new Vue({
+    el:'#app',
+    components:{
+      drag
+    }
+  });
+</script>
+
+</body>
+</html>

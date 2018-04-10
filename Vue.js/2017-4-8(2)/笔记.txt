@@ -1,0 +1,146 @@
+单文件.vue  
+vue-cli + 路由	+ 动画 + 状态管理
+
+安装脚手架（vue-cli)
+	loader: 只是脚手架（webpack）里面的转换器
+	npm install vue-cli -g
+	vue --version
+	vue init webpack-simple 项目目录
+	cd 项目目录
+	npm instal 	安装依赖
+	npm run dev
+状态管理：
+	安装：vuex  到项目目录
+	component->actions->mutations-->state-->getters-->component
+
+	创建store目录
+		|-store
+			|-index.js	主文件	负责引入，导出
+			|-state.js  数据状态
+			|-actions.js 处理事件，
+			|-mutations.js 修改数据
+			|-getters.js 获取数据
+			|-types.js	收集行为方式
+----------------------------------------
+自定义VUE插件(组件)
+	初始化vue项目环境
+
+	组件目录
+		|-loading
+			|-loading.vue
+			|-index.js
+	index.js
+		import 组件变量名.vue
+		export default {
+		  install:function(Vue){
+		    //Vue.component('组件名',组件变量名)
+		  }
+		}
+	<组件名></组件名>	使用全局组件
+
+	main.js
+		import loading from './loading/index.js'
+		Vue.use(loading)
+----------------------------------------
+vue-cli + axios + animate + store
+新闻客户端项目：
+1.	搭建环境(脚手架) 
+	2017-3-13 脚手架需要手动装style-loader,配置webpack.config
+2.	项目分析(组件安排)
+	|-assets
+		|-css/..
+		|-img/..
+		|-js/...
+	|-components
+		|-navbar.vue / footbar.vue
+		|-home.vue / fllow.vue / column.vue / user.vue
+		|-article.vue / login.vue  / reg.vue
+		|-error.vue / slider.vue
+	|-data
+	|-filters
+		|-date.js
+		|-fillzero.js
+		|-index.js
+	|-store
+	|-loading
+		|-index.js
+		|-loading.vue
+	App.vue
+	main.js
+	router.config.js
+3.	已有html模板 移植到 组件.vue
+	
+	base.css / font.js 是全局 main引入
+	私有资源 在对应的组件里面引入
+
+	index_m.html ->index.html(手机尺寸 meta)
+				 -> html标签->app.vue (tempalte)
+				 -> js -> app.vue(script)
+				 app.vue-> navbar/footbar/silder
+	
+	fllow_m -> fllow.vue    style->style html->template
+	column_m -> column_m.vue
+	login_m -> login.vue
+	reg_m -> reg.vue
+
+4. 路由搭建
+	安装： npm i vue-router -D
+	main: 引入
+	router.config.js: 配置
+
+	调用：	navbar/footbar/home/user/login/reg
+	<router-link tag="li"  active-class="abc">   路由解析成li标签  激活路由时的样式active-class
+5.	数据交互
+	安装：axios 
+		npm install axios -D
+	axios.get(url,{}).then(succFN,errorFn)
+	this.$http.get(url,{}).then(succFN,errorFn)
+
+	./img/a.png	服务器	localhost:8080/abc/img/a.png
+	img/a.png	磁盘
+6. 	全局过滤器模块（插件)
+	filters/创建data.js/fillzero.js/index.js
+	date.js/fillzero.js:
+		export const 过滤名=(input)=>{return ...}
+	index.js:
+		export default{
+			date,
+			fillzero
+		}
+	main.js:
+		import filters from './filters/index.js'
+		filters.date/fillzero
+	Object.keys(filters)	返回数组['date','fillzero']
+
+	Object.keys(filters).forEach((key)=>{
+		return Vue.filter(key,filters[key])
+	})
+7. 状态管理
+	路由事件添加：<router-link @click.native="change"
+	不推荐	this.$root.$data.数据名 = 值	有问题
+
+	定义状态: store/index.js/....
+	获取状态：mapGetters
+	修改状态：mapActioins
+	a)	mapActioins(['hideNav/showNav'])
+	b)	this.$store.commit('HIDE_NAV');	-> mutations
+	c)	this.$store.dispatch('hideNav');	-> actions
+	d)	监听路由变化	√
+		router-view
+		watch:{
+			$route(to){
+				to.path + 判断
+			}
+		}
+
+8. 动画
+	animated
+
+
+
+	
+
+
+
+	
+

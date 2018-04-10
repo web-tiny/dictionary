@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+    body,html{overflow: hidden;height:100%;}
+    #div1 {
+      width: 200px;
+      height: 200px;
+      background: #ccc;
+    }
+    .box{
+      background:#ccc;
+      border-bottom: dashed 1px #000;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <script src="js/vue-resource.js"></script>
+  <link rel="stylesheet" href="css/animate.css">
+  <script>
+    window.onload = function () {
+      let vm=new Vue({
+        el:'#baidu',
+        data:{
+          ipt:'',
+          arr:[]
+        },
+        methods:{
+          get(){
+            this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',{
+              wd:this.ipt
+            },{
+              jsonp:'cb'
+            }).then((res)=>{
+//              alert(res.data.s);
+              this.arr=res.data.s;
+            },(error)=>{});
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="baidu">
+  <input type="text" v-model="ipt" @keyup="get">
+  <div v-show="arr.length==0">暂无数据</div>
+  <ul>
+    <transition-group
+      enter-active-class="animated flipInX"
+      leave-active-class="animated flipOutX"
+    >
+      <li class="box" v-for="(val,index) in arr" :key="index">{{val}}</li>
+    </transition-group>
+  </ul>
+</div>
+
+</body>
+</html>

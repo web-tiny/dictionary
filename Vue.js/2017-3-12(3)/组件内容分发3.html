@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>666</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 微软雅黑;
+    }
+  </style>
+  <script src="js/vue.js"></script>
+  <template id="aa">
+    <div>
+      <div>我是aa组件</div>
+      <slot name="s1"></slot>
+      <div>我是aa组件</div>
+      <slot name="s2"></slot>
+      <div>我是aa组件</div>
+      <slot>老人</slot>
+    </div>
+  </template>
+  <script>
+    window.onload = function () {
+
+      new Vue({
+        el:'#app',
+        data:{
+          msg:'bb'
+        },
+        components:{
+          aa:{
+            template:'#aa'
+          }
+        }
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div id="app">
+
+  <aa>
+    <h3 slot="s1">我是使用组件时，里面的内容</h3>
+    <p slot="s2">ooooooo</p>
+  </aa>
+
+</div>
+
+
+</body>
+</html>
